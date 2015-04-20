@@ -310,6 +310,8 @@ DESCRIPTION
 .#define bfd_mach_alpha_ev4  0x10
 .#define bfd_mach_alpha_ev5  0x20
 .#define bfd_mach_alpha_ev6  0x30
+.  bfd_arch_aqua,
+.#define bfd_mach_aqua   1
 .  bfd_arch_arm,       {* Advanced Risc Machines ARM.  *}
 .#define bfd_mach_arm_unknown	0
 .#define bfd_mach_arm_2		1
@@ -547,6 +549,7 @@ DESCRIPTION
 
 extern const bfd_arch_info_type bfd_aarch64_arch;
 extern const bfd_arch_info_type bfd_alpha_arch;
+extern const bfd_arch_info_type bfd_aqua_arch;
 extern const bfd_arch_info_type bfd_arc_arch;
 extern const bfd_arch_info_type bfd_arm_arch;
 extern const bfd_arch_info_type bfd_avr_arch;
@@ -638,6 +641,7 @@ static const bfd_arch_info_type * const bfd_archures_list[] =
 #else
     &bfd_aarch64_arch,
     &bfd_alpha_arch,
+    &bfd_aqua_arch,
     &bfd_arc_arch,
     &bfd_arm_arch,
     &bfd_avr_arch,

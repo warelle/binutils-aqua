@@ -579,6 +579,7 @@ extern const bfd_target aout0_be_vec;
 extern const bfd_target aout64_vec;
 extern const bfd_target aout_vec;
 extern const bfd_target aout_adobe_vec;
+extern const bfd_target aqua_elf32_vec;
 extern const bfd_target arc_elf32_be_vec;
 extern const bfd_target arc_elf32_le_vec;
 extern const bfd_target arm_aout_be_vec;
@@ -970,6 +971,8 @@ static const bfd_target * const _bfd_target_vector[] =
 	&aout_vec,
 #endif
 	&aout_adobe_vec,
+
+  &aqua_elf32_vec,
 
 	&arc_elf32_be_vec,
 	&arc_elf32_le_vec,
