@@ -1,0 +1,13 @@
+(define-rtl-version 0 9)
+(include "./../cpu/simplify.inc")
+(include "./testsuite.cpu")
+
+(define-pmacro test-insns (add sub))
+
+(define-pmacro (define-test-insn name)
+  (bad-command name)
+)
+
+(%for-each (%pmacro (name)
+             (%exec (define-test-insn name)))
+           test-insns)
