@@ -6,12 +6,12 @@ dnl This file is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 3 of the License, or
 dnl (at your option) any later version.
-dnl 
+dnl
 dnl This program is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
-dnl 
+dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program; see the file COPYING3.  If not see
 dnl <http://www.gnu.org/licenses/>.
@@ -234,7 +234,7 @@ do
 	. $srcdir/../bfd/config.bfd
 	selarchs="$selarchs $targ_archs"
     fi
-done	
+done
 
 # Utility var, documents generic cgen support files.
 
@@ -254,6 +254,7 @@ if test x${all_targets} = xfalse ; then
 	case "$arch" in
 	bfd_aarch64_arch)	ta="$ta aarch64-asm.lo aarch64-dis.lo aarch64-opc.lo aarch64-asm-2.lo aarch64-dis-2.lo aarch64-opc-2.lo" ;;
 	bfd_alpha_arch)		ta="$ta alpha-dis.lo alpha-opc.lo" ;;
+	bfd_aqua_arch)		ta="$ta aqua-asm.lo aqua-desc.lo aqua-dis.lo aqua-ibld.lo aqua-opc.lo" using_cgen=yes ;;
 	bfd_arc_arch)		ta="$ta arc-dis.lo arc-opc.lo arc-ext.lo" ;;
 	bfd_arm_arch)		ta="$ta arm-dis.lo" ;;
 	bfd_avr_arch)		ta="$ta avr-dis.lo" ;;

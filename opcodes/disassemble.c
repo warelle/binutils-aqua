@@ -24,6 +24,7 @@
 #ifdef ARCH_all
 #define ARCH_aarch64
 #define ARCH_alpha
+#define ARCH_aqua
 #define ARCH_arc
 #define ARCH_arm
 #define ARCH_avr
@@ -125,6 +126,11 @@ disassembler (abfd)
     case bfd_arch_alpha:
       disassemble = print_insn_alpha;
       break;
+#endif
+#ifdef ARCH_aqua
+    case bfd_arch_aqua:
+		  disassemble = print_insn_aqua;
+			break;
 #endif
 #ifdef ARCH_arc
     case bfd_arch_arc:
