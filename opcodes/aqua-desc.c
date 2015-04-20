@@ -113,7 +113,7 @@ const CGEN_ATTR_TABLE aqua_cgen_insn_attr_table[] =
 /* Instruction set variants.  */
 
 static const CGEN_ISA aqua_cgen_isa_table[] = {
-  { "aqua", 32, 32, 32, 32 },
+  { "aqua", 32, 32, 32, 36 },
   { 0, 0, 0, 0, 0 }
 };
 
@@ -184,8 +184,11 @@ const CGEN_HW_ENTRY aqua_cgen_hw_table[] =
   { "h-iaddr", HW_H_IADDR, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
   { "h-pc", HW_H_PC, CGEN_ASM_NONE, 0, { 0|A(PC), { { { (1<<MACH_BASE), 0 } } } } },
   { "h-gr", HW_H_GR, CGEN_ASM_KEYWORD, (PTR) & aqua_cgen_opval_h_gr, { 0, { { { (1<<MACH_BASE), 0 } } } } },
-  { "h-uint5", HW_H_UINT5, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
-  { "h-int8", HW_H_INT8, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
+  { "h-int21", HW_H_INT21, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
+  { "h-int16", HW_H_INT16, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
+  { "h-int12", HW_H_INT12, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
+  { "h-uint7", HW_H_UINT7, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
+  { "h-uint4", HW_H_UINT4, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
   { 0, 0, CGEN_ASM_NONE, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } }
 };
 
@@ -200,13 +203,21 @@ const CGEN_IFLD aqua_cgen_ifld_table[] =
 {
   { AQUA_F_NIL, "f-nil", 0, 0, 0, 0, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
   { AQUA_F_ANYOF, "f-anyof", 0, 0, 0, 0, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_OPCODE, "f-opcode", 0, 32, 31, 4, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_RX, "f-rx", 0, 32, 27, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_RA, "f-ra", 0, 32, 22, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_RB, "f-rb", 0, 32, 17, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_PREDICTION, "f-prediction", 0, 32, 17, 2, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_LITERAL, "f-literal", 0, 32, 12, 8, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-  { AQUA_F_TAG, "f-tag", 0, 32, 4, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_OPCODE, "f-opcode", 0, 32, 31, 6, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_RD, "f-rd", 0, 32, 25, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_RA, "f-ra", 0, 32, 20, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_RB, "f-rb", 0, 32, 15, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_FUNC1, "f-func1", 0, 32, 3, 4, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_FUNC2, "f-func2", 0, 32, 10, 7, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM21_N, "f-imm21-n", 0, 32, 20, 21, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM16_L, "f-imm16-l", 0, 32, 15, 16, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM12_I, "f-imm12-i", 0, 32, 16, 12, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM21_C_HIGH, "f-imm21-c-high", 0, 32, 25, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM21_C_LOW, "f-imm21-c-low", 0, 32, 15, 16, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM21_C, "f-imm21-c", 0, 0, 0, 0,{ 0|A(VIRTUAL), { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM16_S_HIGH, "f-imm16-s-high", 0, 32, 25, 5, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM16_S_LOW, "f-imm16-s-low", 0, 32, 10, 11, { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+  { AQUA_F_IMM16_S, "f-imm16-s", 0, 0, 0, 0,{ 0|A(VIRTUAL), { { { (1<<MACH_BASE), 0 } } } }  },
   { 0, 0, 0, 0, 0, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } }
 };
 
@@ -216,10 +227,24 @@ const CGEN_IFLD aqua_cgen_ifld_table[] =
 
 /* multi ifield declarations */
 
+const CGEN_MAYBE_MULTI_IFLD AQUA_F_IMM21_C_MULTI_IFIELD [];
+const CGEN_MAYBE_MULTI_IFLD AQUA_F_IMM16_S_MULTI_IFIELD [];
 
 
 /* multi ifield definitions */
 
+const CGEN_MAYBE_MULTI_IFLD AQUA_F_IMM21_C_MULTI_IFIELD [] =
+{
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM21_C_HIGH] } },
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM21_C_LOW] } },
+    { 0, { (const PTR) 0 } }
+};
+const CGEN_MAYBE_MULTI_IFLD AQUA_F_IMM16_S_MULTI_IFIELD [] =
+{
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM16_S_HIGH] } },
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM16_S_LOW] } },
+    { 0, { (const PTR) 0 } }
+};
 
 /* The operand table.  */
 
@@ -232,25 +257,45 @@ const CGEN_OPERAND aqua_cgen_operand_table[] =
   { "pc", AQUA_OPERAND_PC, HW_H_PC, 0, 0,
     { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_NIL] } }, 
     { 0|A(SEM_ONLY), { { { (1<<MACH_BASE), 0 } } } }  },
-/* rx: destination register */
-  { "rx", AQUA_OPERAND_RX, HW_H_GR, 27, 5,
-    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_RX] } }, 
+/* rd: destination register */
+  { "rd", AQUA_OPERAND_RD, HW_H_GR, 25, 5,
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_RD] } }, 
     { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-/* ra: source register */
-  { "ra", AQUA_OPERAND_RA, HW_H_GR, 22, 5,
+/* ra: source register 1 */
+  { "ra", AQUA_OPERAND_RA, HW_H_GR, 20, 5,
     { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_RA] } }, 
     { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-/* rb: additional source register */
-  { "rb", AQUA_OPERAND_RB, HW_H_GR, 17, 5,
+/* rb: source register 2 */
+  { "rb", AQUA_OPERAND_RB, HW_H_GR, 15, 5,
     { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_RB] } }, 
     { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-/* imm8: 8bit immediate value */
-  { "imm8", AQUA_OPERAND_IMM8, HW_H_INT8, 12, 8,
-    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_LITERAL] } }, 
+/* imm21n: 21bit immediate value n-form */
+  { "imm21n", AQUA_OPERAND_IMM21N, HW_H_INT21, 20, 21,
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM21_N] } }, 
     { 0, { { { (1<<MACH_BASE), 0 } } } }  },
-/* tag: alu/fpu operation tag */
-  { "tag", AQUA_OPERAND_TAG, HW_H_UINT5, 4, 5,
-    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_TAG] } }, 
+/* imm21c: 21bit immediate value c-form */
+  { "imm21c", AQUA_OPERAND_IMM21C, HW_H_INT21, 15, 21,
+    { 2, { (const PTR) &AQUA_F_IMM21_C_MULTI_IFIELD[0] } }, 
+    { 0|A(VIRTUAL), { { { (1<<MACH_BASE), 0 } } } }  },
+/* imm16l: 16bit immediate value k-form */
+  { "imm16l", AQUA_OPERAND_IMM16L, HW_H_INT16, 15, 16,
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM16_L] } }, 
+    { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+/* imm16s: 16bit immediate value s-form */
+  { "imm16s", AQUA_OPERAND_IMM16S, HW_H_INT16, 10, 16,
+    { 2, { (const PTR) &AQUA_F_IMM16_S_MULTI_IFIELD[0] } }, 
+    { 0|A(VIRTUAL), { { { (1<<MACH_BASE), 0 } } } }  },
+/* imm12i: 12bit immediate value i-form */
+  { "imm12i", AQUA_OPERAND_IMM12I, HW_H_INT12, 16, 12,
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_IMM12_I] } }, 
+    { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+/* func1: func1 */
+  { "func1", AQUA_OPERAND_FUNC1, HW_H_UINT4, 3, 4,
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_FUNC1] } }, 
+    { 0, { { { (1<<MACH_BASE), 0 } } } }  },
+/* func2: func2 */
+  { "func2", AQUA_OPERAND_FUNC2, HW_H_UINT7, 10, 7,
+    { 0, { (const PTR) &aqua_cgen_ifld_table[AQUA_F_FUNC2] } }, 
     { 0, { { { (1<<MACH_BASE), 0 } } } }  },
 /* sentinel */
   { 0, 0, 0, 0, 0,
@@ -272,84 +317,174 @@ static const CGEN_IBASE aqua_cgen_insn_table[MAX_INSNS] =
      A `num' value of zero is thus invalid.
      Also, the special `invalid' insn resides here.  */
   { 0, 0, 0, 0, { 0, { { { (1<<MACH_BASE), 0 } } } } },
-/* add $rx,$ra,$rb,$imm8 */
+/* add $rd,$ra,$imm16l */
   {
-    AQUA_INSN_ADD, "add", "add", 32,
+    AQUA_INSN_ADDI, "addi", "add", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* sub $rx,$ra,$rb,$imm8 */
+/* sub $rd,$ra,$imm16l */
   {
-    AQUA_INSN_SUB, "sub", "sub", 32,
+    AQUA_INSN_SUBI, "subi", "sub", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* shl $rx,$ra,$rb,$imm8 */
+/* sll $rd,$ra,$imm16l */
   {
-    AQUA_INSN_SHL, "shl", "shl", 32,
+    AQUA_INSN_SLLI, "slli", "sll", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* shr $rx,$ra,$rb,$imm8 */
+/* srl $rd,$ra,$imm16l */
   {
-    AQUA_INSN_SHR, "shr", "shr", 32,
+    AQUA_INSN_SRLI, "srli", "srl", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* sar $rx,$ra,$rb,$imm8 */
+/* sra $rd,$ra,$imm16l */
   {
-    AQUA_INSN_SAR, "sar", "sar", 32,
+    AQUA_INSN_SRAI, "srai", "sra", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* and $rx,$ra,$rb,$imm8 */
+/* and $rd,$ra,$imm16l */
   {
-    AQUA_INSN_AND, "and", "and", 32,
+    AQUA_INSN_ANDI, "andi", "and", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* or $rx,$ra,$rb,$imm8 */
+/* or $rd,$ra,$imm16l */
   {
-    AQUA_INSN_OR, "or", "or", 32,
+    AQUA_INSN_ORI, "ori", "or", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* xor $rx,$ra,$rb,$imm8 */
+/* xor $rd,$ra,$imm16l */
   {
-    AQUA_INSN_XOR, "xor", "xor", 32,
+    AQUA_INSN_XORI, "xori", "xor", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* cmpult $rx,$ra,$rb,$imm8 */
+/* addx4 $rd,$ra,$imm16l */
   {
-    AQUA_INSN_CMPULT, "cmpult", "cmpult", 32,
+    AQUA_INSN_ADDX4I, "addx4i", "addx4", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* cmpule $rx,$ra,$rb,$imm8 */
+/* subx4 $rd,$ra,$imm16l */
   {
-    AQUA_INSN_CMPULE, "cmpule", "cmpule", 32,
+    AQUA_INSN_SUBX4I, "subx4i", "subx4", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* cmpne $rx,$ra,$rb,$imm8 */
+/* mul $rd,$ra,$imm16l */
   {
-    AQUA_INSN_CMPNE, "cmpne", "cmpne", 32,
+    AQUA_INSN_MULI, "muli", "mul", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* cmpeq $rx,$ra,$rb,$imm8 */
+/* mulh $rd,$ra,$imm16l */
   {
-    AQUA_INSN_CMPEQ, "cmpeq", "cmpeq", 32,
+    AQUA_INSN_MULHI, "mulhi", "mulh", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* cmplt $rx,$ra,$rb,$imm8 */
+/* eq $rd,$ra,$imm16l */
   {
-    AQUA_INSN_CMPLT, "cmplt", "cmplt", 32,
+    AQUA_INSN_EQI, "eqi", "eq", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* cmple $rx,$ra,$rb,$imm8 */
+/* ne $rd,$ra,$imm16l */
   {
-    AQUA_INSN_CMPLE, "cmple", "cmple", 32,
+    AQUA_INSN_NEI, "nei", "ne", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* fcmplt $rx,$ra,$rb,$imm8 */
+/* lt $rd,$ra,$imm16l */
   {
-    AQUA_INSN_FCMPLT, "fcmplt", "fcmplt", 32,
+    AQUA_INSN_LTI, "lti", "lt", 36,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
-/* fcmple $rx,$ra,$rb,$imm8 */
+/* le $rd,$ra,$imm16l */
   {
-    AQUA_INSN_FCMPLE, "fcmple", "fcmple", 32,
+    AQUA_INSN_LEI, "lei", "le", 36,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* ult $rd,$ra,$imm16l */
+  {
+    AQUA_INSN_ULTI, "ulti", "ult", 36,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* ule $rd,$ra,$imm16l */
+  {
+    AQUA_INSN_ULEI, "ulei", "ule", 36,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* gt $rd,$ra,$imm16l */
+  {
+    AQUA_INSN_GTI, "gti", "gt", 36,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* ugt $rd,$ra,$imm16l */
+  {
+    AQUA_INSN_UGTI, "ugti", "ugt", 36,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* sysenter $imm12i */
+  {
+    AQUA_INSN_SYSENTER, "sysenter", "sysenter", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* sysexit $imm12i */
+  {
+    AQUA_INSN_SYSEXIT, "sysexit", "sysexit", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* li $rd,$imm21n */
+  {
+    AQUA_INSN_LI, "li", "li", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* lih $rd,$imm21n */
+  {
+    AQUA_INSN_LIH, "lih", "lih", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jl $rd,$imm21n */
+  {
+    AQUA_INSN_JL, "jl", "jl", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* load $rd,$imm16l */
+  {
+    AQUA_INSN_LOAD, "load", "load", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* store $rd,$imm16s */
+  {
+    AQUA_INSN_STORE, "store", "store", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jr $rd,$imm16s */
+  {
+    AQUA_INSN_JR, "jr", "jr", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jeq $rd,$imm16s */
+  {
+    AQUA_INSN_JEQ, "jeq", "jeq", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jne $rd,$imm16s */
+  {
+    AQUA_INSN_JNE, "jne", "jne", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jlt $rd,$imm16s */
+  {
+    AQUA_INSN_JLT, "jlt", "jlt", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jle $rd,$imm16s */
+  {
+    AQUA_INSN_JLE, "jle", "jle", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jgt $rd,$imm16s */
+  {
+    AQUA_INSN_JGT, "jgt", "jgt", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* jge $rd,$imm16s */
+  {
+    AQUA_INSN_JGE, "jge", "jge", 32,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
 };

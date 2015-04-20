@@ -29,18 +29,22 @@ This file is part of the GNU Binutils and/or GDB, the GNU debugger.
 /* -- */
 /* Enum declaration for aqua instruction types.  */
 typedef enum cgen_insn_type {
-  AQUA_INSN_INVALID, AQUA_INSN_ADD, AQUA_INSN_SUB, AQUA_INSN_SHL
- , AQUA_INSN_SHR, AQUA_INSN_SAR, AQUA_INSN_AND, AQUA_INSN_OR
- , AQUA_INSN_XOR, AQUA_INSN_CMPULT, AQUA_INSN_CMPULE, AQUA_INSN_CMPNE
- , AQUA_INSN_CMPEQ, AQUA_INSN_CMPLT, AQUA_INSN_CMPLE, AQUA_INSN_FCMPLT
- , AQUA_INSN_FCMPLE
+  AQUA_INSN_INVALID, AQUA_INSN_ADDI, AQUA_INSN_SUBI, AQUA_INSN_SLLI
+ , AQUA_INSN_SRLI, AQUA_INSN_SRAI, AQUA_INSN_ANDI, AQUA_INSN_ORI
+ , AQUA_INSN_XORI, AQUA_INSN_ADDX4I, AQUA_INSN_SUBX4I, AQUA_INSN_MULI
+ , AQUA_INSN_MULHI, AQUA_INSN_EQI, AQUA_INSN_NEI, AQUA_INSN_LTI
+ , AQUA_INSN_LEI, AQUA_INSN_ULTI, AQUA_INSN_ULEI, AQUA_INSN_GTI
+ , AQUA_INSN_UGTI, AQUA_INSN_SYSENTER, AQUA_INSN_SYSEXIT, AQUA_INSN_LI
+ , AQUA_INSN_LIH, AQUA_INSN_JL, AQUA_INSN_LOAD, AQUA_INSN_STORE
+ , AQUA_INSN_JR, AQUA_INSN_JEQ, AQUA_INSN_JNE, AQUA_INSN_JLT
+ , AQUA_INSN_JLE, AQUA_INSN_JGT, AQUA_INSN_JGE
 } CGEN_INSN_TYPE;
 
 /* Index of `invalid' insn place holder.  */
 #define CGEN_INSN_INVALID AQUA_INSN_INVALID
 
 /* Total number of insns in table.  */
-#define MAX_INSNS ((int) AQUA_INSN_FCMPLE + 1)
+#define MAX_INSNS ((int) AQUA_INSN_JGE + 1)
 
 /* This struct records data prior to insertion or after extraction.  */
 struct cgen_fields
@@ -49,12 +53,20 @@ struct cgen_fields
   long f_nil;
   long f_anyof;
   long f_opcode;
-  long f_rx;
+  long f_rd;
   long f_ra;
   long f_rb;
-  long f_prediction;
-  long f_literal;
-  long f_tag;
+  long f_func1;
+  long f_func2;
+  long f_imm21_n;
+  long f_imm16_l;
+  long f_imm12_i;
+  long f_imm21_c_high;
+  long f_imm21_c_low;
+  long f_imm21_c;
+  long f_imm16_s_high;
+  long f_imm16_s_low;
+  long f_imm16_s;
 };
 
 #define CGEN_INIT_PARSE(od) \

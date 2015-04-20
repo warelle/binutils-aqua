@@ -47,8 +47,28 @@ static const CGEN_IFMT ifmt_empty ATTRIBUTE_UNUSED = {
   0, 0, 0x0, { { 0 } }
 };
 
-static const CGEN_IFMT ifmt_add ATTRIBUTE_UNUSED = {
-  32, 32, 0xf000001f, { { F (F_OPCODE) }, { F (F_RX) }, { F (F_RA) }, { F (F_RB) }, { F (F_LITERAL) }, { F (F_TAG) }, { 0 } }
+static const CGEN_IFMT ifmt_addi ATTRIBUTE_UNUSED = {
+  32, 36, 0xfc00000f, { { F (F_OPCODE) }, { F (F_RD) }, { F (F_RA) }, { F (F_IMM16_L) }, { F (F_FUNC1) }, { 0 } }
+};
+
+static const CGEN_IFMT ifmt_sysenter ATTRIBUTE_UNUSED = {
+  32, 32, 0xffff000f, { { F (F_OPCODE) }, { F (F_RD) }, { F (F_RA) }, { F (F_IMM12_I) }, { F (F_FUNC1) }, { 0 } }
+};
+
+static const CGEN_IFMT ifmt_li ATTRIBUTE_UNUSED = {
+  32, 32, 0xfc000000, { { F (F_OPCODE) }, { F (F_RD) }, { F (F_IMM21_N) }, { 0 } }
+};
+
+static const CGEN_IFMT ifmt_load ATTRIBUTE_UNUSED = {
+  32, 32, 0xfc000000, { { F (F_OPCODE) }, { F (F_RD) }, { F (F_RA) }, { F (F_IMM16_L) }, { 0 } }
+};
+
+static const CGEN_IFMT ifmt_store ATTRIBUTE_UNUSED = {
+  32, 32, 0xfc000000, { { F (F_OPCODE) }, { F (F_RA) }, { F (F_RB) }, { F (F_IMM16_S) }, { 0 } }
+};
+
+static const CGEN_IFMT ifmt_jr ATTRIBUTE_UNUSED = {
+  32, 32, 0xfc000000, { { F (F_OPCODE) }, { F (F_RA) }, { F (F_IMM21_C) }, { 0 } }
 };
 
 #undef F
@@ -66,101 +86,209 @@ static const CGEN_OPCODE aqua_cgen_insn_opcode_table[MAX_INSNS] =
      A `num' value of zero is thus invalid.
      Also, the special `invalid' insn resides here.  */
   { { 0, 0, 0, 0 }, {{0}}, 0, {0}},
-/* add $rx,$ra,$rb,$imm8 */
+/* add $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x0 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x0 }
   },
-/* sub $rx,$ra,$rb,$imm8 */
+/* sub $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x1 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x1 }
   },
-/* shl $rx,$ra,$rb,$imm8 */
+/* sll $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x2 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x2 }
   },
-/* shr $rx,$ra,$rb,$imm8 */
+/* srl $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x3 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x3 }
   },
-/* sar $rx,$ra,$rb,$imm8 */
+/* sra $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x4 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x4 }
   },
-/* and $rx,$ra,$rb,$imm8 */
+/* and $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x5 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x5 }
   },
-/* or $rx,$ra,$rb,$imm8 */
+/* or $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x6 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x6 }
   },
-/* xor $rx,$ra,$rb,$imm8 */
+/* xor $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x7 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x7 }
   },
-/* cmpult $rx,$ra,$rb,$imm8 */
+/* addx4 $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x8 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x8 }
   },
-/* cmpule $rx,$ra,$rb,$imm8 */
+/* subx4 $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0x9 }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x9 }
   },
-/* cmpne $rx,$ra,$rb,$imm8 */
+/* mul $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0xa }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0xa }
   },
-/* cmpeq $rx,$ra,$rb,$imm8 */
+/* mulh $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0xb }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0xb }
   },
-/* cmplt $rx,$ra,$rb,$imm8 */
+/* eq $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0xc }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000000 }
   },
-/* cmple $rx,$ra,$rb,$imm8 */
+/* ne $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0xd }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000001 }
   },
-/* fcmplt $rx,$ra,$rb,$imm8 */
+/* lt $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0xe }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000002 }
   },
-/* fcmple $rx,$ra,$rb,$imm8 */
+/* le $rd,$ra,$imm16l */
   {
     { 0, 0, 0, 0 },
-    { { MNEM, ' ', OP (RX), ',', OP (RA), ',', OP (RB), ',', OP (IMM8), 0 } },
-    & ifmt_add, { 0xf }
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000003 }
+  },
+/* ult $rd,$ra,$imm16l */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000004 }
+  },
+/* ule $rd,$ra,$imm16l */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000005 }
+  },
+/* gt $rd,$ra,$imm16l */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000006 }
+  },
+/* ugt $rd,$ra,$imm16l */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (RA), ',', OP (IMM16L), 0 } },
+    & ifmt_addi, { 0x18000007 }
+  },
+/* sysenter $imm12i */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (IMM12I), 0 } },
+    & ifmt_sysenter, { 0x78000000 }
+  },
+/* sysexit $imm12i */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (IMM12I), 0 } },
+    & ifmt_sysenter, { 0x78000001 }
+  },
+/* li $rd,$imm21n */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM21N), 0 } },
+    & ifmt_li, { 0x48000000 }
+  },
+/* lih $rd,$imm21n */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM21N), 0 } },
+    & ifmt_li, { 0x4c000000 }
+  },
+/* jl $rd,$imm21n */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM21N), 0 } },
+    & ifmt_li, { 0x80000000 }
+  },
+/* load $rd,$imm16l */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16L), 0 } },
+    & ifmt_load, { 0x60000000 }
+  },
+/* store $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_store, { 0x64000000 }
+  },
+/* jr $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0x84000000 }
+  },
+/* jeq $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0xa0000000 }
+  },
+/* jne $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0xa4000000 }
+  },
+/* jlt $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0xa8000000 }
+  },
+/* jle $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0xac000000 }
+  },
+/* jgt $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0xb0000000 }
+  },
+/* jge $rd,$imm16s */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RD), ',', OP (IMM16S), 0 } },
+    & ifmt_jr, { 0xb4000000 }
   },
 };
 

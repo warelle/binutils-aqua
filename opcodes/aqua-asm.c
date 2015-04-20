@@ -179,8 +179,26 @@ aqua_cgen_parse_operand (CGEN_CPU_DESC cd,
 
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM8, (long *) (& fields->f_literal));
+    case AQUA_OPERAND_FUNC1 :
+      errmsg = cgen_parse_unsigned_integer (cd, strp, AQUA_OPERAND_FUNC1, (unsigned long *) (& fields->f_func1));
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      errmsg = cgen_parse_unsigned_integer (cd, strp, AQUA_OPERAND_FUNC2, (unsigned long *) (& fields->f_func2));
+      break;
+    case AQUA_OPERAND_IMM12I :
+      errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM12I, (long *) (& fields->f_imm12_i));
+      break;
+    case AQUA_OPERAND_IMM16L :
+      errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM16L, (long *) (& fields->f_imm16_l));
+      break;
+    case AQUA_OPERAND_IMM16S :
+      errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM16S, (long *) (& fields->f_imm16_s));
+      break;
+    case AQUA_OPERAND_IMM21C :
+      errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM21C, (long *) (& fields->f_imm21_c));
+      break;
+    case AQUA_OPERAND_IMM21N :
+      errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM21N, (long *) (& fields->f_imm21_n));
       break;
     case AQUA_OPERAND_RA :
       errmsg = cgen_parse_keyword (cd, strp, & aqua_cgen_opval_h_gr, & fields->f_ra);
@@ -188,11 +206,8 @@ aqua_cgen_parse_operand (CGEN_CPU_DESC cd,
     case AQUA_OPERAND_RB :
       errmsg = cgen_parse_keyword (cd, strp, & aqua_cgen_opval_h_gr, & fields->f_rb);
       break;
-    case AQUA_OPERAND_RX :
-      errmsg = cgen_parse_keyword (cd, strp, & aqua_cgen_opval_h_gr, & fields->f_rx);
-      break;
-    case AQUA_OPERAND_TAG :
-      errmsg = cgen_parse_unsigned_integer (cd, strp, AQUA_OPERAND_TAG, (unsigned long *) (& fields->f_tag));
+    case AQUA_OPERAND_RD :
+      errmsg = cgen_parse_keyword (cd, strp, & aqua_cgen_opval_h_gr, & fields->f_rd);
       break;
 
     default :
