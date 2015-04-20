@@ -312,8 +312,8 @@ ZLIBINC = @zlibinc@
 
 # Automake 1.10+ disables lex and yacc output file regeneration if
 # maintainer mode is disabled.  Avoid this.
-am__skiplex = 
-am__skipyacc = 
+am__skiplex =
+am__skipyacc =
 AM_CFLAGS = $(WARN_CFLAGS) $(ZLIBINC)
 TARG_CPU = @target_cpu_type@
 TARG_CPU_C = $(srcdir)/config/tc-@target_cpu_type@.c
@@ -402,6 +402,7 @@ HFILES = \
 TARGET_CPU_CFILES = \
 	config/tc-aarch64.c \
 	config/tc-alpha.c \
+	config/tc-aqua.c \
 	config/tc-arc.c \
 	config/tc-arm.c \
 	config/tc-avr.c \
@@ -476,6 +477,7 @@ TARGET_CPU_CFILES = \
 TARGET_CPU_HFILES = \
 	config/tc-aarch64.h \
 	config/tc-alpha.h \
+	config/tc-aqua.h \
 	config/tc-arc.h \
 	config/tc-arm.h \
 	config/tc-avr.h \
@@ -677,7 +679,7 @@ EXTRA_as_new_SOURCES = $(CFILES) $(HFILES) $(TARGET_CPU_CFILES) \
 	config/m68k-parse.y config/bfin-parse.y
 EXPECT = expect
 RUNTEST = runtest
-RUNTESTFLAGS = 
+RUNTESTFLAGS =
 itbl_test_SOURCES = itbl-parse.y itbl-lex.l
 itbl_test_LDADD = itbl-tops.@OBJEXT@ itbl-test.@OBJEXT@ $(GASLIBS) @LEXLIB@
 
@@ -743,7 +745,7 @@ config.h: stamp-h1
 stamp-h1: $(srcdir)/config.in $(top_builddir)/config.status
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
-$(srcdir)/config.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
+$(srcdir)/config.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
 	rm -f stamp-h1
 	touch $@
@@ -765,10 +767,10 @@ clean-noinstPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-as-new$(EXEEXT): $(as_new_OBJECTS) $(as_new_DEPENDENCIES) 
+as-new$(EXEEXT): $(as_new_OBJECTS) $(as_new_DEPENDENCIES)
 	@rm -f as-new$(EXEEXT)
 	$(LINK) $(as_new_OBJECTS) $(as_new_LDADD) $(LIBS)
-itbl-test$(EXEEXT): $(itbl_test_OBJECTS) $(itbl_test_DEPENDENCIES) 
+itbl-test$(EXEEXT): $(itbl_test_OBJECTS) $(itbl_test_DEPENDENCIES)
 	@rm -f itbl-test$(EXEEXT)
 	$(LINK) $(itbl_test_OBJECTS) $(itbl_test_LDADD) $(LIBS)
 
@@ -832,6 +834,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symbols.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tc-aarch64.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tc-alpha.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tc-aqua.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tc-arc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tc-arm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tc-avr.Po@am__quote@
@@ -953,6 +956,20 @@ tc-alpha.obj: config/tc-alpha.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='config/tc-alpha.c' object='tc-alpha.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tc-alpha.obj `if test -f 'config/tc-alpha.c'; then $(CYGPATH_W) 'config/tc-alpha.c'; else $(CYGPATH_W) '$(srcdir)/config/tc-alpha.c'; fi`
+
+tc-aqua.o: config/tc-aqua.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tc-aqua.o -MD -MP -MF $(DEPDIR)/tc-aqua.Tpo -c -o tc-aqua.o `test -f 'config/tc-aqua.c' || echo '$(srcdir)/'`config/tc-aqua.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/tc-aqua.Tpo $(DEPDIR)/tc-aqua.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='config/tc-aqua.c' object='tc-aqua.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tc-aqua.o `test -f 'config/tc-aqua.c' || echo '$(srcdir)/'`config/tc-aqua.c
+
+tc-aqua.obj: config/tc-aqua.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tc-aqua.obj -MD -MP -MF $(DEPDIR)/tc-aqua.Tpo -c -o tc-aqua.obj `if test -f 'config/tc-aqua.c'; then $(CYGPATH_W) 'config/tc-aqua.c'; else $(CYGPATH_W) '$(srcdir)/config/tc-aqua.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/tc-aqua.Tpo $(DEPDIR)/tc-aqua.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='config/tc-aqua.c' object='tc-aqua.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tc-aqua.obj `if test -f 'config/tc-aqua.c'; then $(CYGPATH_W) 'config/tc-aqua.c'; else $(CYGPATH_W) '$(srcdir)/config/tc-aqua.c'; fi`
 
 tc-arc.o: config/tc-arc.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tc-arc.o -MD -MP -MF $(DEPDIR)/tc-arc.Tpo -c -o tc-arc.o `test -f 'config/tc-arc.c' || echo '$(srcdir)/'`config/tc-arc.c

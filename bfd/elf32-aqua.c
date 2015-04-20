@@ -22,7 +22,7 @@
 #include "libbfd.h"
 #include "elf-bfd.h"
 
-#define TARGET_BIG_SYM		bfd_elf32_aqua_vec
+#define TARGET_BIG_SYM		aqua_elf32_vec
 #define TARGET_BIG_NAME		"elf32-aqua"
 #define ELF_ARCH		bfd_arch_aqua
 #define ELF_MACHINE_CODE	EM_AQUA
