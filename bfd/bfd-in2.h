@@ -1,7 +1,7 @@
-/* DO NOT EDIT!  -*- buffer-read-only: t -*-  This file is automatically 
-   generated from "bfd-in.h", "init.c", "opncls.c", "libbfd.c", 
-   "bfdio.c", "bfdwin.c", "section.c", "archures.c", "reloc.c", 
-   "syms.c", "bfd.c", "archive.c", "corefile.c", "targets.c", "format.c", 
+/* DO NOT EDIT!  -*- buffer-read-only: t -*-  This file is automatically
+   generated from "bfd-in.h", "init.c", "opncls.c", "libbfd.c",
+   "bfdio.c", "bfdwin.c", "section.c", "archures.c", "reloc.c",
+   "syms.c", "bfd.c", "archive.c", "corefile.c", "targets.c", "format.c",
    "linker.c", "simple.c" and "compress.c".
    Run "make headers" in your build bfd/ to regenerate.  */
 
@@ -2096,6 +2096,8 @@ enum bfd_architecture
 #define bfd_mach_alpha_ev4  0x10
 #define bfd_mach_alpha_ev5  0x20
 #define bfd_mach_alpha_ev6  0x30
+  bfd_arch_aqua,
+#define bfd_mach_aqua 1
   bfd_arch_arm,       /* Advanced Risc Machines ARM.  */
 #define bfd_mach_arm_unknown   0
 #define bfd_mach_arm_2         1

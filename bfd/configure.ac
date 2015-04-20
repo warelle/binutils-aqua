@@ -6,12 +6,12 @@ dnl This file is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 3 of the License, or
 dnl (at your option) any later version.
-dnl 
+dnl
 dnl This program is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
-dnl 
+dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program; see the file COPYING3.  If not see
 dnl <http://www.gnu.org/licenses/>.
@@ -705,6 +705,7 @@ do
     aout64_vec)			 tb="$tb demo64.lo aout64.lo"; target_size=64 ;;
     aout_vec)			 tb="$tb host-aout.lo aout32.lo" ;;
     aout_adobe_vec)		 tb="$tb aout-adobe.lo aout32.lo" ;;
+    aqua_elf32_vec)   tb="$tb elf32-aqua.lo elf32.lo $elf" ;;
     arc_elf32_be_vec)		 tb="$tb elf32-arc.lo elf32.lo $elf" ;;
     arc_elf32_le_vec)		 tb="$tb elf32-arc.lo elf32.lo $elf" ;;
     arm_aout_be_vec)		 tb="$tb aout-arm.lo aout32.lo" ;;
