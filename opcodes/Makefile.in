@@ -22,12 +22,12 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; see the file COPYING3.  If not see
 # <http://www.gnu.org/licenses/>.
@@ -252,10 +252,10 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 archdefs = @archdefs@
-@INSTALL_LIBBFD_FALSE@bfdincludedir = 
+@INSTALL_LIBBFD_FALSE@bfdincludedir =
 @INSTALL_LIBBFD_TRUE@bfdincludedir = @bfdincludedir@
 # Empty these so that the respective installation directories will not be created.
-@INSTALL_LIBBFD_FALSE@bfdlibdir = 
+@INSTALL_LIBBFD_FALSE@bfdlibdir =
 @INSTALL_LIBBFD_TRUE@bfdlibdir = @bfdlibdir@
 bindir = @bindir@
 build = @build@
@@ -371,6 +371,11 @@ TARGET_LIBOPCODES_CFILES = \
 	aarch64-opc-2.c \
 	alpha-dis.c \
 	alpha-opc.c \
+	aqua-asm.c \
+	aqua-desc.c \
+	aqua-dis.c \
+	aqua-ibld.c \
+	aqua-opc.c \
 	arc-dis.c \
 	arc-ext.c \
 	arc-opc.c \
@@ -591,10 +596,10 @@ EXTRA_libopcodes_la_SOURCES = $(LIBOPCODES_CFILES)
 # programs that use libopcodes.a simultaneously.  This is a hack which
 # should be removed if everything else starts using libtool.  FIXME.
 noinst_LIBRARIES = libopcodes.a
-libopcodes_a_SOURCES = 
+libopcodes_a_SOURCES =
 POTFILES = $(HFILES) $(CFILES)
 CLEANFILES = \
-	stamp-epiphany stamp-fr30 stamp-frv stamp-ip2k stamp-iq2000 stamp-lm32 \
+	stamp-aqua stamp-epiphany stamp-fr30 stamp-frv stamp-ip2k stamp-iq2000 stamp-lm32 \
 	stamp-m32c stamp-m32r stamp-mep stamp-mt \
 	stamp-or1k stamp-xc16x stamp-xstormy16 \
 	libopcodes.a stamp-lib
@@ -610,32 +615,34 @@ CGENDEPS = \
 	$(CGENDIR)/opc-opinst.scm \
 	cgen-asm.in cgen-dis.in cgen-ibld.in
 
-CGEN_CPUS = epiphany fr30 frv ip2k iq2000 lm32 m32c m32r mep mt or1k xc16x xstormy16
-@CGEN_MAINT_FALSE@EPIPHANY_DEPS = 
+CGEN_CPUS = aqua epiphany fr30 frv ip2k iq2000 lm32 m32c m32r mep mt or1k xc16x xstormy16
+@CGEN_MAINT_FALSE@AQUA_DEPS =
+@CGEN_MAINT_TRUE@AQUA_DEPS = stamp-aqua
+@CGEN_MAINT_FALSE@EPIPHANY_DEPS =
 @CGEN_MAINT_TRUE@EPIPHANY_DEPS = stamp-epiphany
-@CGEN_MAINT_FALSE@FR30_DEPS = 
+@CGEN_MAINT_FALSE@FR30_DEPS =
 @CGEN_MAINT_TRUE@FR30_DEPS = stamp-fr30
-@CGEN_MAINT_FALSE@FRV_DEPS = 
+@CGEN_MAINT_FALSE@FRV_DEPS =
 @CGEN_MAINT_TRUE@FRV_DEPS = stamp-frv
-@CGEN_MAINT_FALSE@IP2K_DEPS = 
+@CGEN_MAINT_FALSE@IP2K_DEPS =
 @CGEN_MAINT_TRUE@IP2K_DEPS = stamp-ip2k
-@CGEN_MAINT_FALSE@IQ2000_DEPS = 
+@CGEN_MAINT_FALSE@IQ2000_DEPS =
 @CGEN_MAINT_TRUE@IQ2000_DEPS = stamp-iq2000
-@CGEN_MAINT_FALSE@LM32_DEPS = 
+@CGEN_MAINT_FALSE@LM32_DEPS =
 @CGEN_MAINT_TRUE@LM32_DEPS = stamp-lm32
-@CGEN_MAINT_FALSE@M32C_DEPS = 
+@CGEN_MAINT_FALSE@M32C_DEPS =
 @CGEN_MAINT_TRUE@M32C_DEPS = stamp-m32c
-@CGEN_MAINT_FALSE@M32R_DEPS = 
+@CGEN_MAINT_FALSE@M32R_DEPS =
 @CGEN_MAINT_TRUE@M32R_DEPS = stamp-m32r
-@CGEN_MAINT_FALSE@MEP_DEPS = 
+@CGEN_MAINT_FALSE@MEP_DEPS =
 @CGEN_MAINT_TRUE@MEP_DEPS = stamp-mep
-@CGEN_MAINT_FALSE@MT_DEPS = 
+@CGEN_MAINT_FALSE@MT_DEPS =
 @CGEN_MAINT_TRUE@MT_DEPS = stamp-mt
-@CGEN_MAINT_FALSE@OR1K_DEPS = 
+@CGEN_MAINT_FALSE@OR1K_DEPS =
 @CGEN_MAINT_TRUE@OR1K_DEPS = stamp-or1k
-@CGEN_MAINT_FALSE@XC16X_DEPS = 
+@CGEN_MAINT_FALSE@XC16X_DEPS =
 @CGEN_MAINT_TRUE@XC16X_DEPS = stamp-xc16x
-@CGEN_MAINT_FALSE@XSTORMY16_DEPS = 
+@CGEN_MAINT_FALSE@XSTORMY16_DEPS =
 @CGEN_MAINT_TRUE@XSTORMY16_DEPS = stamp-xstormy16
 MOSTLYCLEANFILES = aarch64-gen$(EXEEXT_FOR_BUILD) i386-gen$(EXEEXT_FOR_BUILD) \
 	ia64-gen$(EXEEXT_FOR_BUILD) s390-mkopc$(EXEEXT_FOR_BUILD) s390-opc.tab \
@@ -703,7 +710,7 @@ config.h: stamp-h1
 stamp-h1: $(srcdir)/config.in $(top_builddir)/config.status
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
-$(srcdir)/config.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
+$(srcdir)/config.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
 	rm -f stamp-h1
 	touch $@
@@ -755,7 +762,7 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libopcodes.la: $(libopcodes_la_OBJECTS) $(libopcodes_la_DEPENDENCIES) 
+libopcodes.la: $(libopcodes_la_OBJECTS) $(libopcodes_la_DEPENDENCIES)
 	$(libopcodes_la_LINK) $(am_libopcodes_la_rpath) $(libopcodes_la_OBJECTS) $(libopcodes_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
@@ -772,6 +779,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aarch64-opc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alpha-dis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alpha-opc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aqua-asm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aqua-desc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aqua-dis.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aqua-ibld.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aqua-opc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/arc-dis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/arc-ext.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/arc-opc.Plo@am__quote@
@@ -1301,6 +1313,12 @@ run-cgen-all:
 
 # For now, require developers to configure with --enable-cgen-maint.
 
+$(srcdir)/aqua-desc.h $(srcdir)/aqua-desc.c $(srcdir)/aqua-opc.h $(srcdir)/aqua-opc.c $(srcdir)/aqua-ibld.c $(srcdir)/aqua-asm.c $(srcdir)/aqua-dis.c: $(AQUA_DEPS)
+	@true
+stamp-aqua: $(CGENDEPS) $(CPUDIR)/aqua.cpu $(CPUDIR)/aqua.opc
+	$(MAKE) run-cgen arch=aqua prefix=aqua options= \
+		archfile=$(CPUDIR)/aqua.cpu opcfile=$(CPUDIR)/aqua.opc extrafiles=
+
 $(srcdir)/epiphany-desc.h $(srcdir)/epiphany-desc.c $(srcdir)/epiphany-opc.h \
 		$(srcdir)/epiphany-opc.c $(srcdir)/epiphany-ibld.c \
 		$(srcdir)/epiphany-opinst.c $(srcdir)/epiphany-asm.c \
@@ -1416,7 +1434,7 @@ i386-gen.o: i386-gen.c i386-opc.h $(srcdir)/../include/opcode/i386.h \
 	config.h i386-opc.h sysdep.h
 	$(COMPILE_FOR_BUILD) -c $(srcdir)/i386-gen.c
 
-$(srcdir)/i386-tbl.h: $(srcdir)/i386-init.h 
+$(srcdir)/i386-tbl.h: $(srcdir)/i386-init.h
 	@echo $@
 
 $(srcdir)/i386-init.h: @MAINT@ i386-gen$(EXEEXT_FOR_BUILD) i386-opc.tbl i386-reg.tbl

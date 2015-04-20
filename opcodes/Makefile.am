@@ -6,12 +6,12 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; see the file COPYING3.  If not see
 # <http://www.gnu.org/licenses/>.
@@ -99,6 +99,11 @@ TARGET_LIBOPCODES_CFILES = \
 	aarch64-opc-2.c \
 	alpha-dis.c \
 	alpha-opc.c \
+	aqua-asm.c \
+	aqua-desc.c \
+	aqua-dis.c \
+	aqua-ibld.c \
+	aqua-opc.c \
 	arc-dis.c \
 	arc-ext.c \
 	arc-opc.c \
@@ -353,7 +358,7 @@ po/POTFILES.in: @MAINT@ Makefile
 	  && mv tmp $(srcdir)/po/POTFILES.in
 
 CLEANFILES = \
-	stamp-epiphany stamp-fr30 stamp-frv stamp-ip2k stamp-iq2000 stamp-lm32 \
+	stamp-aqua stamp-epiphany stamp-fr30 stamp-frv stamp-ip2k stamp-iq2000 stamp-lm32 \
 	stamp-m32c stamp-m32r stamp-mep stamp-mt \
 	stamp-or1k stamp-xc16x stamp-xstormy16 \
 	libopcodes.a stamp-lib
@@ -374,6 +379,7 @@ CGENDEPS = \
 CGEN_CPUS = epiphany fr30 frv ip2k iq2000 lm32 m32c m32r mep mt or1k xc16x xstormy16
 
 if CGEN_MAINT
+AQUA_DEPS = stamp-aqua
 EPIPHANY_DEPS = stamp-epiphany
 FR30_DEPS = stamp-fr30
 FRV_DEPS = stamp-frv
@@ -388,19 +394,20 @@ OR1K_DEPS = stamp-or1k
 XC16X_DEPS = stamp-xc16x
 XSTORMY16_DEPS = stamp-xstormy16
 else
+AQUA_DEPS =
 EPIPHANY_DEPS =
 FR30_DEPS =
 FRV_DEPS =
 IP2K_DEPS =
-IQ2000_DEPS = 
-LM32_DEPS = 
+IQ2000_DEPS =
+LM32_DEPS =
 M32C_DEPS =
 M32R_DEPS =
 MEP_DEPS =
 MT_DEPS =
-OR1K_DEPS = 
-XC16X_DEPS = 
-XSTORMY16_DEPS = 
+OR1K_DEPS =
+XC16X_DEPS =
+XSTORMY16_DEPS =
 endif
 
 run-cgen:
@@ -419,6 +426,12 @@ run-cgen-all:
 .PHONY: run-cgen-all
 
 # For now, require developers to configure with --enable-cgen-maint.
+
+$(srcdir)/aqua-desc.h $(srcdir)/aqua-desc.c $(srcdir)/aqua-opc.h $(srcdir)/aqua-opc.c $(srcdir)/aqua-ibld.c $(srcdir)/aqua-asm.c $(srcdir)/aqua-dis.c: $(AQUA_DEPS)
+	@true
+stamp-aqua: $(CGENDEPS) $(CPUDIR)/aqua.cpu $(CPUDIR)/aqua.opc
+	$(MAKE) run-cgen arch=aqua prefix=aqua options= \
+		archfile=$(CPUDIR)/aqua.cpu opcfile=$(CPUDIR)/aqua.opc extrafiles=
 
 $(srcdir)/epiphany-desc.h $(srcdir)/epiphany-desc.c $(srcdir)/epiphany-opc.h \
 		$(srcdir)/epiphany-opc.c $(srcdir)/epiphany-ibld.c \
@@ -546,7 +559,7 @@ i386-gen.o: i386-gen.c i386-opc.h $(srcdir)/../include/opcode/i386.h \
 	config.h i386-opc.h sysdep.h
 	$(COMPILE_FOR_BUILD) -c $(srcdir)/i386-gen.c
 
-$(srcdir)/i386-tbl.h: $(srcdir)/i386-init.h 
+$(srcdir)/i386-tbl.h: $(srcdir)/i386-init.h
 	@echo $@
 
 $(srcdir)/i386-init.h: @MAINT@ i386-gen$(EXEEXT_FOR_BUILD) i386-opc.tbl i386-reg.tbl
