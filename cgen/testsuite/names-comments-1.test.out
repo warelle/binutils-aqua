@@ -1,0 +1,2 @@
+cgen -s ./../cgen-testsuite.scm -s ./.. -b -a names-comments-1.test.cpu -T names-comments-1.cgen.out 
+PASS: lists in names

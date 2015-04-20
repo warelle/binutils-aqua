@@ -1,0 +1,231 @@
+cgen -s ./../cgen-testsuite.scm -s ./.. -b -a pmacros-1-percent.test.cpu -T pmacros-1-percent.cgen.out 
+((name1 string1 1 ) (name2 string2 2 ) (name3 string3 3 ) )
+TEST: %ref, %car
+TEST: %for-each, nested %pmacros
+MATCH: adgbehcfi
+EXPR: adgbehcfi
+TEST: nested %pmacros with bindings
+MATCH: (+ 4 3)
+EXPR: (+ 4 3)
+TEST: %dump
+MATCH: (name1 "string1" 1)(name2 "string2" 2)(name3 "string3" 3)
+
+EXPR: (name1 "string1" 1)(name2 "string2" 2)(name3 "string3" 3)
+TEST: %sym
+MATCH: abc
+
+EXPR: abc
+TEST: %str
+MATCH: "def"
+
+EXPR: "def"
+TEST: %hex
+MATCH: "2a"
+EXPR: "2a"
+TEST: %upcase
+MATCH: "UPPER"
+EXPR: "UPPER"
+MATCH: UPPER
+EXPR: UPPER
+TEST: %downcase
+MATCH: "downer"
+EXPR: "downer"
+MATCH: downer
+EXPR: downer
+TEST: %substring
+MATCH: "zz"
+EXPR: "zz"
+MATCH: zz
+EXPR: zz
+TEST: %splice1
+MATCH: (now is the time)
+EXPR: (now is the time)
+TEST: %splice2
+MATCH: (now is the time)
+EXPR: (now is the time)
+TEST: %splice3
+MATCH: (now is the time)
+EXPR: (now is the time)
+TEST: %iota
+MATCH: (0 1 2 3)
+EXPR: (0 1 2 3)
+MATCH: (1 2 3 4)
+EXPR: (1 2 3 4)
+MATCH: (2 4 6 8)
+EXPR: (2 4 6 8)
+TEST: %map
+MATCH: ("a" "b" "c")
+EXPR: ("a" "b" "c")
+MATCH: ("a" "b" "c")
+EXPR: ("a" "b" "c")
+TEST: %apply
+MATCH: ABC
+EXPR: ABC
+TEST: %pmacro?
+MATCH: #t
+EXPR: #t
+MATCH: #t
+EXPR: #t
+MATCH: #t
+EXPR: #t
+MATCH: #f
+EXPR: #f
+TEST: %eval
+MATCH: (explicitly-undefined 42)
+EXPR: (explicitly-undefined 42)
+TEST: %let
+MATCH: xyzzy
+EXPR: xyzzy
+MATCH: (x y)
+EXPR: (x y)
+TEST: %let*
+MATCH: (1 2)
+EXPR: (1 2)
+TEST: %if
+MATCH: then
+EXPR: then
+MATCH: else
+EXPR: else
+TEST: %case
+MATCH: 123
+EXPR: 123
+MATCH: 123
+EXPR: 123
+MATCH: 456
+EXPR: 456
+TEST: %cond
+MATCH: yep
+EXPR: yep
+MATCH: nope
+EXPR: nope
+TEST: %begin
+MATCH: xyz
+EXPR: xyz
+TEST: %list, %ref
+MATCH: grief
+EXPR: grief
+TEST: %length
+MATCH: 6
+EXPR: 6
+MATCH: 9
+EXPR: 9
+MATCH: 4
+EXPR: 4
+TEST: %replicate
+MATCH: (no no no no)
+EXPR: (no no no no)
+TEST: %find
+MATCH: (0 1)
+EXPR: (0 1)
+TEST: %equal?
+MATCH: #t
+EXPR: #t
+MATCH: #f
+EXPR: #f
+TEST: %andif
+MATCH: andif
+EXPR: andif
+MATCH: #f
+EXPR: #f
+MATCH: #t
+EXPR: #t
+TEST: %orif
+MATCH: orif
+EXPR: orif
+MATCH: #f
+EXPR: #f
+MATCH: #f
+EXPR: #f
+TEST: %not
+MATCH: yep
+EXPR: yep
+MATCH: nope
+EXPR: nope
+TEST: %eq
+MATCH: eq
+EXPR: eq
+MATCH: eq2
+EXPR: eq2
+TEST: %ne
+MATCH: ne
+EXPR: ne
+MATCH: ne2
+EXPR: ne2
+TEST: %lt
+MATCH: lt
+EXPR: lt
+TEST: %gt
+MATCH: gt
+EXPR: gt
+TEST: %le
+MATCH: le1
+EXPR: le1
+MATCH: le2
+EXPR: le2
+TEST: %ge
+MATCH: ge1
+EXPR: ge1
+MATCH: ge2
+EXPR: ge2
+TEST: %add
+MATCH: 3
+EXPR: 3
+TEST: %sub
+MATCH: -1
+EXPR: -1
+TEST: %mul
+MATCH: 6
+EXPR: 6
+TEST: %div
+MATCH: 4
+EXPR: 4
+TEST: %rem
+MATCH: 0
+EXPR: 0
+TEST: %sll
+MATCH: 8
+EXPR: 8
+MATCH: 4
+EXPR: 4
+TEST: %srl
+MATCH: 1
+EXPR: 1
+MATCH: 4
+EXPR: 4
+TEST: %sra
+MATCH: -1
+EXPR: -1
+MATCH: -1
+EXPR: -1
+MATCH: -2
+EXPR: -2
+TEST: %and
+MATCH: 8
+EXPR: 8
+TEST: %or
+MATCH: 15
+EXPR: 15
+TEST: %xor
+MATCH: 7
+EXPR: 7
+TEST: %inv
+MATCH: -6
+EXPR: -6
+TEST: %car
+MATCH: car
+EXPR: car
+TEST: %cdr
+MATCH: (cdr)
+EXPR: (cdr)
+TEST: %caar
+MATCH: caar
+EXPR: caar
+TEST: %cadr
+MATCH: cadr
+EXPR: cadr
+TEST: %cdar
+MATCH: (cdar)
+EXPR: (cdar)
+TEST: %cddr
+MATCH: (cddr)
+EXPR: (cddr)

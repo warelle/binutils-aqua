@@ -1,0 +1,133 @@
+
+Backtrace:
+In ././../read.scm:
+ 302:  0  [error "
+While reading description:
+@ location-1.test.cpu:8:3: referenced from:
+location-1.test.cpu:9:2(end): referenced from:
+location-1.test.cpu:12:21: referenced from:
+location-1.test.cpu:12:14: referenced from:
+location-1.test.cpu:11:12: referenced from:
+location-1.test.cpu:11:1: referenced from:
+location-1.test.cpu:13:23(end):
+
+location-1.test.cpu:8:3: Error: unknown entry type: (bad-command add)
+
+"]
+ 296:  1  (let* (# # # # ...) (emitter #))
+ 325:  2  [/parse-diagnostic #<procedure error args> #("object" <context> 3 ...) ...]
+ 425:  3  [parse-error #("object" <context> 3 ...) "unknown entry type" ...]
+ 398:  4  (if command (let* (# # #) (if # # ...)) ...)
+ 395:  5  (let ((command #) (context #)) (if command (let* # #) ...))
+ 380:  6* (let* (#) (if # #) (reader-set-location! CURRENT-READER location) ...)
+ 445:  7  [/reader-process-expanded-1! (bad-command add)]
+ 435:  8* (cond (# #f) (# #) (else #))
+In ./../pmacros.scm:
+ 864:  9* [reader-process-expanded! (bad-command add)]
+ 863: 10  (begin (reader-process-expanded! expr) nil)
+ 861: 11  (if /pmacro-debug? (list (quote %exec) expr) ...)
+In unknown file:
+   ?: 12  [/pmacro-builtin-exec (bad-command add)]
+In ./../pmacros.scm:
+ 338: 13  [apply #<procedure /pmacro-builtin-exec (expr)> ((bad-command add))]
+ 434: 14  [/pmacro-apply #(<pmacro> %exec (expr) ...) ((bad-command add))]
+ 433: 15* (if (procedure? #) (/pmacro-apply scanned-car scanned-args) ...)
+ 431: 16  (let* ((scanned-args #) (result #)) (if /pmacro-trace? (let # # ...)) ...)
+ 410: 17  (begin (if /pmacro-trace? #) (let* # # result))
+ 409: 18  (if (/pmacro? scanned-car) (begin # #) (cons scanned-car #))
+ 408: 19  (let* ((scanned-car #)) (if (/pmacro? scanned-car) (begin # #) ...))
+ 398: 20  (if sform (begin (/smacro-apply sform (cdr exp) ...)) ...)
+ 397: 21  (let* ((sform #)) (if sform (begin #) (let* # #)))
+ 460: 22* [scan-list1 (%exec (define-test-insn name)) #("object" <location> 0 ...)]
+ 460: 23  (let* ((result #)) (if (pair? result) (begin # #)) result)
+ 453: 24  (let ((src-props #) (new-loc loc)) (if (not #) (let # #)) ...)
+ 479: 25  [scan-list (%exec (define-test-insn name)) #("object" <location> 0 ...)]
+ 476: 26* (cond (# #) (# #) (else exp))
+ 476: 27  (let* ((result #)) (if (symbol? result) (scan-symbol result) result))
+ 489: 28  [scan (%exec (define-test-insn name)) #("object" <location> 0 ...)]
+In unknown file:
+   ?: 29  (letrec ((cep #) (scan-symbol #) (check-pmacro #) ...) (scan exp loc))
+In ./../pmacros.scm:
+ 567: 30* [/pmacro-expand (%exec (define-test-insn name)) ((name . add)) ...]
+In unknown file:
+   ?: 31* [#<procedure #f args> add]
+   ?: 32* [for-each #<procedure #f args> (add sub)]
+   ?: 33  [for-each]
+In ./../pmacros.scm:
+ 837: 34* [apply #<primitive-generic for-each> (#<procedure #f args> (add sub))]
+ 834: 35  (let* (#) (if # #) (apply for-each #) ...)
+In unknown file:
+   ?: 36  [/pmacro-builtin-for-each #(<pmacro> %anonymous (name) ...) (add sub)]
+In ./../pmacros.scm:
+ 338: 37  [apply #<procedure /pmacro-builtin-for-each #> #]
+ 434: 38  [/pmacro-apply #(<pmacro> %for-each # #f ...) (# #)]
+ 433: 39* (if (procedure? #) (/pmacro-apply scanned-car scanned-args) ...)
+ 431: 40  (let* ((scanned-args #) (result #)) (if /pmacro-trace? (let # # ...)) ...)
+ 410: 41  (begin (if /pmacro-trace? #) (let* # # result))
+ 409: 42  (if (/pmacro? scanned-car) (begin # #) (cons scanned-car #))
+ 408: 43  (let* ((scanned-car #)) (if (/pmacro? scanned-car) (begin # #) ...))
+ 398: 44  (if sform (begin (/smacro-apply sform (cdr exp) ...)) ...)
+ 397: 45  (let* ((sform #)) (if sform (begin #) (let* # #)))
+ 460: 46* [scan-list1 (%for-each # test-insns) #("object" <location> 0 #)]
+ 460: 47  (let* ((result #)) (if (pair? result) (begin # #)) result)
+ 453: 48  (let ((src-props #) (new-loc loc)) (if (not #) (let # #)) ...)
+ 479: 49  [scan-list (%for-each # test-insns) #("object" <location> 0 #)]
+ 476: 50* (cond (# #) (# #) (else exp))
+ 476: 51  (let* ((result #)) (if (symbol? result) (scan-symbol result) result))
+ 489: 52  [scan (%for-each (%pmacro # #) test-insns) #("object" <location> 0 (#))]
+In unknown file:
+   ?: 53  (letrec ((cep #) (scan-symbol #) (check-pmacro #) ...) (scan exp loc))
+In ./../pmacros.scm:
+ 632: 54  [/pmacro-expand (%for-each (%pmacro (name) (%exec #)) test-insns) () ...]
+In ././../read.scm:
+ 374: 55  [pmacro-expand (%for-each # test-insns) #("object" <location> 0 #)]
+ 372: 56  (if (reader-trace-pmacros? CURRENT-READER) (pmacro-trace expr loc) ...)
+ 482: 57* [/reader-expand (%for-each # test-insns) #("object" <location> 0 #)]
+ 482: 58  (let* ((expansion #)) (reader-process-expanded! expansion))
+ 463: 59* (cond ((null? entry) #f) ((eq? # #) (for-each # #)) ...)
+ 506: 60* [/reader-process-with-loc! # #]
+ 499: 61  (begin (/reader-process-with-loc! entry #) (loop #))
+    ...
+ 499: 62  (begin (/reader-process-with-loc! entry #) (loop #))
+ 497: 63  (if (eof-object? entry) #t ...)
+ 507: 64  [loop (include "./testsuite.cpu")]
+ 499: 65  (begin (/reader-process-with-loc! entry #) (loop #))
+ 497: 66  (if (eof-object? entry) #t ...)
+ 507: 67  [loop (include "./../cpu/simplify.inc")]
+ 499: 68  (begin (/reader-process-with-loc! entry #) (loop #))
+ 497: 69  (if (eof-object? entry) #t ...)
+ 496: 70* [loop (define-rtl-version 0 9)]
+In unknown file:
+   ?: 71* [#<procedure #f ()>]
+   ?: 72  [dynamic-wind #<procedure #f ()> #<procedure #f ()> #<procedure #f ()>]
+   ?: 73  (let* ((swaports (lambda () #))) (dynamic-wind swaports thunk swaports))
+   ?: 74* [with-input-from-port #<input: location-1.test.cpu 6> #<procedure #f ()>]
+   ?: 75  (let* ((nport #) (ans #)) (close-port nport) ans)
+In ././../read.scm:
+ 510: 76  [with-input-from-file "location-1.test.cpu" #<procedure #f ()>]
+ 495: 77* (let* ((readit (lambda () #))) (with-input-from-file file readit))
+1111: 78* [reader-read-file! "location-1.test.cpu"]
+1393: 79* [cpu-load "location-1.test.cpu" "all" ...]
+In ./../guile.scm:
+ 115: 80* [#<procedure #f ()>]
+ 115: 81* (begin (thunk) #t)
+ 115: 82  (start-stack (begin (thunk) #t) #f)
+In ././../read.scm:
+1383: 83  [cgen-call-with-debugging #t #<procedure #f ()>]
+1289: 84  (let (# # # # ...) (# #) (cgen-call-with-debugging debugging #))
+1257: 85* (let (# # # # ...) (# args) (let # # #))
+
+cgen -s ./../cgen-testsuite.scm -s ./.. -b -a location-1.test.cpu -T location-1.cgen.out 
+ERROR: 
+While reading description:
+@ location-1.test.cpu:8:3: referenced from:
+location-1.test.cpu:9:2(end): referenced from:
+location-1.test.cpu:12:21: referenced from:
+location-1.test.cpu:12:14: referenced from:
+location-1.test.cpu:11:12: referenced from:
+location-1.test.cpu:11:1: referenced from:
+location-1.test.cpu:13:23(end):
+
+location-1.test.cpu:8:3: Error: unknown entry type: (bad-command add)
+
+

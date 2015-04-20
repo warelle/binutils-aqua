@@ -1,0 +1,13 @@
+(include "./../cpu/simplify.inc")
+(include "./testsuite.cpu")
+
+(define-insn (name (add 3))
+             (comment (("This is a" " comment")
+                       " constructed as a list."))
+             (syntax "add3")
+	     (semantics (sequence VOID nop))
+)
+
+;; Verify the correct insn got created.
+;; ??? Also need to verify the comment's contents.
+(internal-verify "lists in names" (current-insn-lookup 'add3 #f))
