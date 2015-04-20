@@ -565,20 +565,57 @@ aqua_cgen_insert_operand (CGEN_CPU_DESC cd,
 
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      errmsg = insert_normal (cd, fields->f_literal, 0, 0, 12, 8, 32, total_length, buffer);
+    case AQUA_OPERAND_FUNC1 :
+      errmsg = insert_normal (cd, fields->f_func1, 0, 0, 3, 4, 32, total_length, buffer);
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      errmsg = insert_normal (cd, fields->f_func2, 0, 0, 10, 7, 32, total_length, buffer);
+      break;
+    case AQUA_OPERAND_IMM12I :
+      errmsg = insert_normal (cd, fields->f_imm12_i, 0, 0, 16, 12, 32, total_length, buffer);
+      break;
+    case AQUA_OPERAND_IMM16L :
+      errmsg = insert_normal (cd, fields->f_imm16_l, 0, 0, 15, 16, 32, total_length, buffer);
+      break;
+    case AQUA_OPERAND_IMM16S :
+      {
+{
+  FLD (f_imm16_s_high) = ((((INT) (FLD (f_imm16_s)) >> (11))) & (31));
+  FLD (f_imm16_s_low) = ((FLD (f_imm16_s)) & (2047));
+}
+        errmsg = insert_normal (cd, fields->f_imm16_s_high, 0, 0, 25, 5, 32, total_length, buffer);
+        if (errmsg)
+          break;
+        errmsg = insert_normal (cd, fields->f_imm16_s_low, 0, 0, 10, 11, 32, total_length, buffer);
+        if (errmsg)
+          break;
+      }
+      break;
+    case AQUA_OPERAND_IMM21C :
+      {
+{
+  FLD (f_imm21_c_high) = ((((INT) (FLD (f_imm21_c)) >> (16))) & (31));
+  FLD (f_imm21_c_low) = ((FLD (f_imm21_c)) & (65535));
+}
+        errmsg = insert_normal (cd, fields->f_imm21_c_high, 0, 0, 25, 5, 32, total_length, buffer);
+        if (errmsg)
+          break;
+        errmsg = insert_normal (cd, fields->f_imm21_c_low, 0, 0, 15, 16, 32, total_length, buffer);
+        if (errmsg)
+          break;
+      }
+      break;
+    case AQUA_OPERAND_IMM21N :
+      errmsg = insert_normal (cd, fields->f_imm21_n, 0, 0, 20, 21, 32, total_length, buffer);
       break;
     case AQUA_OPERAND_RA :
-      errmsg = insert_normal (cd, fields->f_ra, 0, 0, 22, 5, 32, total_length, buffer);
+      errmsg = insert_normal (cd, fields->f_ra, 0, 0, 20, 5, 32, total_length, buffer);
       break;
     case AQUA_OPERAND_RB :
-      errmsg = insert_normal (cd, fields->f_rb, 0, 0, 17, 5, 32, total_length, buffer);
+      errmsg = insert_normal (cd, fields->f_rb, 0, 0, 15, 5, 32, total_length, buffer);
       break;
-    case AQUA_OPERAND_RX :
-      errmsg = insert_normal (cd, fields->f_rx, 0, 0, 27, 5, 32, total_length, buffer);
-      break;
-    case AQUA_OPERAND_TAG :
-      errmsg = insert_normal (cd, fields->f_tag, 0, 0, 4, 5, 32, total_length, buffer);
+    case AQUA_OPERAND_RD :
+      errmsg = insert_normal (cd, fields->f_rd, 0, 0, 25, 5, 32, total_length, buffer);
       break;
 
     default :
@@ -623,20 +660,51 @@ aqua_cgen_extract_operand (CGEN_CPU_DESC cd,
 
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      length = extract_normal (cd, ex_info, insn_value, 0, 0, 12, 8, 32, total_length, pc, & fields->f_literal);
+    case AQUA_OPERAND_FUNC1 :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 3, 4, 32, total_length, pc, & fields->f_func1);
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 10, 7, 32, total_length, pc, & fields->f_func2);
+      break;
+    case AQUA_OPERAND_IMM12I :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 16, 12, 32, total_length, pc, & fields->f_imm12_i);
+      break;
+    case AQUA_OPERAND_IMM16L :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 15, 16, 32, total_length, pc, & fields->f_imm16_l);
+      break;
+    case AQUA_OPERAND_IMM16S :
+      {
+        length = extract_normal (cd, ex_info, insn_value, 0, 0, 25, 5, 32, total_length, pc, & fields->f_imm16_s_high);
+        if (length <= 0) break;
+        length = extract_normal (cd, ex_info, insn_value, 0, 0, 10, 11, 32, total_length, pc, & fields->f_imm16_s_low);
+        if (length <= 0) break;
+{
+  FLD (f_imm16_s) = ((((32768) ^ (((((FLD (f_imm16_s_high)) << (11))) | (FLD (f_imm16_s_low)))))) - (32768));
+}
+      }
+      break;
+    case AQUA_OPERAND_IMM21C :
+      {
+        length = extract_normal (cd, ex_info, insn_value, 0, 0, 25, 5, 32, total_length, pc, & fields->f_imm21_c_high);
+        if (length <= 0) break;
+        length = extract_normal (cd, ex_info, insn_value, 0, 0, 15, 16, 32, total_length, pc, & fields->f_imm21_c_low);
+        if (length <= 0) break;
+{
+  FLD (f_imm21_c) = ((((1048576) ^ (((((FLD (f_imm21_c_high)) << (16))) | (FLD (f_imm21_c_low)))))) - (1048576));
+}
+      }
+      break;
+    case AQUA_OPERAND_IMM21N :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 20, 21, 32, total_length, pc, & fields->f_imm21_n);
       break;
     case AQUA_OPERAND_RA :
-      length = extract_normal (cd, ex_info, insn_value, 0, 0, 22, 5, 32, total_length, pc, & fields->f_ra);
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 20, 5, 32, total_length, pc, & fields->f_ra);
       break;
     case AQUA_OPERAND_RB :
-      length = extract_normal (cd, ex_info, insn_value, 0, 0, 17, 5, 32, total_length, pc, & fields->f_rb);
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 15, 5, 32, total_length, pc, & fields->f_rb);
       break;
-    case AQUA_OPERAND_RX :
-      length = extract_normal (cd, ex_info, insn_value, 0, 0, 27, 5, 32, total_length, pc, & fields->f_rx);
-      break;
-    case AQUA_OPERAND_TAG :
-      length = extract_normal (cd, ex_info, insn_value, 0, 0, 4, 5, 32, total_length, pc, & fields->f_tag);
+    case AQUA_OPERAND_RD :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 25, 5, 32, total_length, pc, & fields->f_rd);
       break;
 
     default :
@@ -676,8 +744,26 @@ aqua_cgen_get_int_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
 
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      value = fields->f_literal;
+    case AQUA_OPERAND_FUNC1 :
+      value = fields->f_func1;
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      value = fields->f_func2;
+      break;
+    case AQUA_OPERAND_IMM12I :
+      value = fields->f_imm12_i;
+      break;
+    case AQUA_OPERAND_IMM16L :
+      value = fields->f_imm16_l;
+      break;
+    case AQUA_OPERAND_IMM16S :
+      value = fields->f_imm16_s;
+      break;
+    case AQUA_OPERAND_IMM21C :
+      value = fields->f_imm21_c;
+      break;
+    case AQUA_OPERAND_IMM21N :
+      value = fields->f_imm21_n;
       break;
     case AQUA_OPERAND_RA :
       value = fields->f_ra;
@@ -685,11 +771,8 @@ aqua_cgen_get_int_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
     case AQUA_OPERAND_RB :
       value = fields->f_rb;
       break;
-    case AQUA_OPERAND_RX :
-      value = fields->f_rx;
-      break;
-    case AQUA_OPERAND_TAG :
-      value = fields->f_tag;
+    case AQUA_OPERAND_RD :
+      value = fields->f_rd;
       break;
 
     default :
@@ -711,8 +794,26 @@ aqua_cgen_get_vma_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
 
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      value = fields->f_literal;
+    case AQUA_OPERAND_FUNC1 :
+      value = fields->f_func1;
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      value = fields->f_func2;
+      break;
+    case AQUA_OPERAND_IMM12I :
+      value = fields->f_imm12_i;
+      break;
+    case AQUA_OPERAND_IMM16L :
+      value = fields->f_imm16_l;
+      break;
+    case AQUA_OPERAND_IMM16S :
+      value = fields->f_imm16_s;
+      break;
+    case AQUA_OPERAND_IMM21C :
+      value = fields->f_imm21_c;
+      break;
+    case AQUA_OPERAND_IMM21N :
+      value = fields->f_imm21_n;
       break;
     case AQUA_OPERAND_RA :
       value = fields->f_ra;
@@ -720,11 +821,8 @@ aqua_cgen_get_vma_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
     case AQUA_OPERAND_RB :
       value = fields->f_rb;
       break;
-    case AQUA_OPERAND_RX :
-      value = fields->f_rx;
-      break;
-    case AQUA_OPERAND_TAG :
-      value = fields->f_tag;
+    case AQUA_OPERAND_RD :
+      value = fields->f_rd;
       break;
 
     default :
@@ -753,8 +851,26 @@ aqua_cgen_set_int_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
 {
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      fields->f_literal = value;
+    case AQUA_OPERAND_FUNC1 :
+      fields->f_func1 = value;
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      fields->f_func2 = value;
+      break;
+    case AQUA_OPERAND_IMM12I :
+      fields->f_imm12_i = value;
+      break;
+    case AQUA_OPERAND_IMM16L :
+      fields->f_imm16_l = value;
+      break;
+    case AQUA_OPERAND_IMM16S :
+      fields->f_imm16_s = value;
+      break;
+    case AQUA_OPERAND_IMM21C :
+      fields->f_imm21_c = value;
+      break;
+    case AQUA_OPERAND_IMM21N :
+      fields->f_imm21_n = value;
       break;
     case AQUA_OPERAND_RA :
       fields->f_ra = value;
@@ -762,11 +878,8 @@ aqua_cgen_set_int_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
     case AQUA_OPERAND_RB :
       fields->f_rb = value;
       break;
-    case AQUA_OPERAND_RX :
-      fields->f_rx = value;
-      break;
-    case AQUA_OPERAND_TAG :
-      fields->f_tag = value;
+    case AQUA_OPERAND_RD :
+      fields->f_rd = value;
       break;
 
     default :
@@ -785,8 +898,26 @@ aqua_cgen_set_vma_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
 {
   switch (opindex)
     {
-    case AQUA_OPERAND_IMM8 :
-      fields->f_literal = value;
+    case AQUA_OPERAND_FUNC1 :
+      fields->f_func1 = value;
+      break;
+    case AQUA_OPERAND_FUNC2 :
+      fields->f_func2 = value;
+      break;
+    case AQUA_OPERAND_IMM12I :
+      fields->f_imm12_i = value;
+      break;
+    case AQUA_OPERAND_IMM16L :
+      fields->f_imm16_l = value;
+      break;
+    case AQUA_OPERAND_IMM16S :
+      fields->f_imm16_s = value;
+      break;
+    case AQUA_OPERAND_IMM21C :
+      fields->f_imm21_c = value;
+      break;
+    case AQUA_OPERAND_IMM21N :
+      fields->f_imm21_n = value;
       break;
     case AQUA_OPERAND_RA :
       fields->f_ra = value;
@@ -794,11 +925,8 @@ aqua_cgen_set_vma_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
     case AQUA_OPERAND_RB :
       fields->f_rb = value;
       break;
-    case AQUA_OPERAND_RX :
-      fields->f_rx = value;
-      break;
-    case AQUA_OPERAND_TAG :
-      fields->f_tag = value;
+    case AQUA_OPERAND_RD :
+      fields->f_rd = value;
       break;
 
     default :

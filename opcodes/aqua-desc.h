@@ -40,12 +40,12 @@ This file is part of the GNU Binutils and/or GDB, the GNU debugger.
 #define CGEN_MIN_INSN_SIZE 4
 
 /* Maximum size of any insn (in bytes).  */
-#define CGEN_MAX_INSN_SIZE 4
+#define CGEN_MAX_INSN_SIZE 5
 
-#define CGEN_INT_INSN_P 1
+#define CGEN_INT_INSN_P 0
 
 /* Maximum number of syntax elements in an instruction.  */
-#define CGEN_ACTUAL_MAX_SYNTAX_ELEMENTS 16
+#define CGEN_ACTUAL_MAX_SYNTAX_ELEMENTS 13
 
 /* CGEN_MNEMONIC_OPERANDS is defined if mnemonics have operands.
    e.g. In "b,a foo" the ",a" is an operand.  If mnemonics have operands
@@ -53,7 +53,7 @@ This file is part of the GNU Binutils and/or GDB, the GNU debugger.
 #define CGEN_MNEMONIC_OPERANDS
 
 /* Maximum number of fields in an instruction.  */
-#define CGEN_ACTUAL_MAX_IFMT_OPERANDS 6
+#define CGEN_ACTUAL_MAX_IFMT_OPERANDS 5
 
 /* Enums.  */
 
@@ -63,19 +63,67 @@ typedef enum insn_op {
  , OP_4, OP_5, OP_6, OP_7
  , OP_8, OP_9, OP_10, OP_11
  , OP_12, OP_13, OP_14, OP_15
+ , OP_16, OP_17, OP_18, OP_19
+ , OP_20, OP_21, OP_22, OP_23
+ , OP_24, OP_25, OP_26, OP_27
+ , OP_28, OP_29, OP_30, OP_31
+ , OP_32, OP_33, OP_34, OP_35
+ , OP_36, OP_37, OP_38, OP_39
+ , OP_40, OP_41, OP_42, OP_43
+ , OP_44, OP_45, OP_46, OP_47
+ , OP_48, OP_49, OP_50, OP_51
+ , OP_52, OP_53, OP_54, OP_55
+ , OP_56, OP_57, OP_58, OP_59
+ , OP_60, OP_61, OP_62, OP_63
 } INSN_OP;
 
 /* Enum declaration for insn format enums.  */
-typedef enum insn_alu {
-  ALU_0, ALU_1, ALU_2, ALU_3
- , ALU_4, ALU_5, ALU_6, ALU_7
- , ALU_8, ALU_9, ALU_10, ALU_11
- , ALU_12, ALU_13, ALU_14, ALU_15
- , ALU_16, ALU_17, ALU_18, ALU_19
- , ALU_20, ALU_21, ALU_22, ALU_23
- , ALU_24, ALU_25, ALU_26, ALU_27
- , ALU_28, ALU_29, ALU_30, ALU_31
-} INSN_ALU;
+typedef enum func1_op {
+  FUNC1_0, FUNC1_1, FUNC1_2, FUNC1_3
+ , FUNC1_4, FUNC1_5, FUNC1_6, FUNC1_7
+ , FUNC1_8, FUNC1_9, FUNC1_10, FUNC1_11
+ , FUNC1_12, FUNC1_13, FUNC1_14, FUNC1_15
+} FUNC1_OP;
+
+/* Enum declaration for insn format enums.  */
+typedef enum func2_op {
+  FUNC2_0, FUNC2_1, FUNC2_2, FUNC2_3
+ , FUNC2_4, FUNC2_5, FUNC2_6, FUNC2_7
+ , FUNC2_8, FUNC2_9, FUNC2_10, FUNC2_11
+ , FUNC2_12, FUNC2_13, FUNC2_14, FUNC2_15
+ , FUNC2_16, FUNC2_17, FUNC2_18, FUNC2_19
+ , FUNC2_20, FUNC2_21, FUNC2_22, FUNC2_23
+ , FUNC2_24, FUNC2_25, FUNC2_26, FUNC2_27
+ , FUNC2_28, FUNC2_29, FUNC2_30, FUNC2_31
+ , FUNC2_32, FUNC2_33, FUNC2_34, FUNC2_35
+ , FUNC2_36, FUNC2_37, FUNC2_38, FUNC2_39
+ , FUNC2_40, FUNC2_41, FUNC2_42, FUNC2_43
+ , FUNC2_44, FUNC2_45, FUNC2_46, FUNC2_47
+ , FUNC2_48, FUNC2_49, FUNC2_50, FUNC2_51
+ , FUNC2_52, FUNC2_53, FUNC2_54, FUNC2_55
+ , FUNC2_56, FUNC2_57, FUNC2_58, FUNC2_59
+ , FUNC2_60, FUNC2_61, FUNC2_62, FUNC2_63
+} FUNC2_OP;
+
+/* Enum declaration for insn format enums.  */
+typedef enum rd_op {
+  RD_0
+} RD_OP;
+
+/* Enum declaration for insn format enums.  */
+typedef enum ra_op {
+  RA_0
+} RA_OP;
+
+/* Enum declaration for insn format enums.  */
+typedef enum rb_op {
+  RB_0
+} RB_OP;
+
+/* Enum declaration for insn format enums.  */
+typedef enum limm12_op {
+  L_IMM12_0
+} LIMM12_OP;
 
 /* Attributes.  */
 
@@ -118,9 +166,11 @@ typedef enum cgen_ifld_attr {
 
 /* Enum declaration for aqua ifield types.  */
 typedef enum ifield_type {
-  AQUA_F_NIL, AQUA_F_ANYOF, AQUA_F_OPCODE, AQUA_F_RX
- , AQUA_F_RA, AQUA_F_RB, AQUA_F_PREDICTION, AQUA_F_LITERAL
- , AQUA_F_TAG, AQUA_F_MAX
+  AQUA_F_NIL, AQUA_F_ANYOF, AQUA_F_OPCODE, AQUA_F_RD
+ , AQUA_F_RA, AQUA_F_RB, AQUA_F_FUNC1, AQUA_F_FUNC2
+ , AQUA_F_IMM21_N, AQUA_F_IMM16_L, AQUA_F_IMM12_I, AQUA_F_IMM21_C_HIGH
+ , AQUA_F_IMM21_C_LOW, AQUA_F_IMM21_C, AQUA_F_IMM16_S_HIGH, AQUA_F_IMM16_S_LOW
+ , AQUA_F_IMM16_S, AQUA_F_MAX
 } IFIELD_TYPE;
 
 #define MAX_IFLD ((int) AQUA_F_MAX)
@@ -146,8 +196,9 @@ typedef enum cgen_hw_attr {
 /* Enum declaration for aqua hardware types.  */
 typedef enum cgen_hw_type {
   HW_H_MEMORY, HW_H_SINT, HW_H_UINT, HW_H_ADDR
- , HW_H_IADDR, HW_H_PC, HW_H_GR, HW_H_UINT5
- , HW_H_INT8, HW_MAX
+ , HW_H_IADDR, HW_H_PC, HW_H_GR, HW_H_INT21
+ , HW_H_INT16, HW_H_INT12, HW_H_UINT7, HW_H_UINT4
+ , HW_MAX
 } CGEN_HW_TYPE;
 
 #define MAX_HW ((int) HW_MAX)
@@ -177,12 +228,13 @@ typedef enum cgen_operand_attr {
 
 /* Enum declaration for aqua operand types.  */
 typedef enum cgen_operand_type {
-  AQUA_OPERAND_PC, AQUA_OPERAND_RX, AQUA_OPERAND_RA, AQUA_OPERAND_RB
- , AQUA_OPERAND_IMM8, AQUA_OPERAND_TAG, AQUA_OPERAND_MAX
+  AQUA_OPERAND_PC, AQUA_OPERAND_RD, AQUA_OPERAND_RA, AQUA_OPERAND_RB
+ , AQUA_OPERAND_IMM21N, AQUA_OPERAND_IMM21C, AQUA_OPERAND_IMM16L, AQUA_OPERAND_IMM16S
+ , AQUA_OPERAND_IMM12I, AQUA_OPERAND_FUNC1, AQUA_OPERAND_FUNC2, AQUA_OPERAND_MAX
 } CGEN_OPERAND_TYPE;
 
 /* Number of operands types.  */
-#define MAX_OPERANDS 6
+#define MAX_OPERANDS 11
 
 /* Maximum number of operands referenced by any insn.  */
 #define MAX_OPERAND_INSTANCES 8
