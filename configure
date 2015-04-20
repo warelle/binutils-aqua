@@ -3730,6 +3730,10 @@ case "${target}" in
   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
     noconfigdirs="$noconfigdirs tcl tk itcl libgui sim"
     ;;
+  aqua-*-*)
+    noconfigdirs="$noconfigdirs ${libgcj} gdb sim"
+    noconfigdirs="$noconfigdirs bfd binutils opcodes gas ld gprof"
+    ;;
   arc-*-*|arceb-*-*)
     noconfigdirs="$noconfigdirs target-libgloss"
     ;;
