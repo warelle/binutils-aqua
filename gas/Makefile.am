@@ -131,6 +131,7 @@ HFILES = \
 TARGET_CPU_CFILES = \
 	config/tc-aarch64.c \
 	config/tc-alpha.c \
+	config/tc-aqua.c \
 	config/tc-arc.c \
 	config/tc-arm.c \
 	config/tc-avr.c \
@@ -205,6 +206,7 @@ TARGET_CPU_CFILES = \
 TARGET_CPU_HFILES = \
 	config/tc-aarch64.h \
 	config/tc-alpha.h \
+	config/tc-aqua.h \
 	config/tc-arc.h \
 	config/tc-arm.h \
 	config/tc-avr.h \
