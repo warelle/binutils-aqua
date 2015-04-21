@@ -221,6 +221,7 @@ ALL_EMULATION_SOURCES = \
 	eelf32_tic6x_elf_be.c \
 	eelf32_tic6x_elf_le.c \
 	eelf32am33lin.c \
+  eelf32aqua.c \
 	eelf32bfin.c \
 	eelf32bfinfd.c \
 	eelf32cr16.c \
@@ -895,6 +896,9 @@ ed30velf.c: $(srcdir)/emulparams/d30velf.sh \
 
 edelta68.c: $(srcdir)/emulparams/delta68.sh \
   $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/delta68.sc ${GEN_DEPENDS}
+
+eelf32aqua.c: $(srcdir)/emulparams/elf32aqua.sh \
+  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
 
 eelf32_dlx.c: $(srcdir)/emulparams/elf32_dlx.sh \
   $(ELF_GEN_DEPS) $(srcdir)/scripttempl/dlx.sc ${GEN_DEPENDS}
