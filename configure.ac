@@ -1073,7 +1073,7 @@ case "${target}" in
     ;;
   aqua-*-*)
     noconfigdirs="$noconfigdirs ${libgcj} gdb sim"
-    noconfigdirs="$noconfigdirs ld gprof"
+    noconfigdirs="$noconfigdirs gprof"
     ;;
   arc-*-*|arceb-*-*)
     noconfigdirs="$noconfigdirs target-libgloss"
