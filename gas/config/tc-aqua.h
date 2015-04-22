@@ -36,8 +36,8 @@
 
 /* PC relative operands are relative to the start of the opcode, and
    the operand is always one byte into the opcode.  */
-#define md_pcrel_from(FIX) 						\
-	((FIX)->fx_where + (FIX)->fx_frag->fr_address - 1)
+#define MD_PCREL_FROM_SECTION(FIX, SEC) md_pcrel_from_section (FIX, SEC)
+extern long md_pcrel_from_section (struct fix *, segT);
 
 #define md_section_align(SEGMENT, SIZE)     (SIZE)
 

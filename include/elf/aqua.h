@@ -24,6 +24,7 @@
 /* Relocation types.  */
 START_RELOC_NUMBERS (elf_aqua_reloc_type)
   RELOC_NUMBER (R_AQUA_NONE, 0)
+  RELOC_NUMBER (R_AQUA_32, 1)
 END_RELOC_NUMBERS (R_AQUA_max)
 
 #endif

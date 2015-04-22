@@ -174,7 +174,24 @@ md_show_usage (FILE *stream ATTRIBUTE_UNUSED)
 void
 md_apply_fix (fixS *fixP ATTRIBUTE_UNUSED, valueT * valP ATTRIBUTE_UNUSED, segT seg ATTRIBUTE_UNUSED)
 {
-  /* Empty for now.  */
+  char *where = fixP->fx_where + fixP->fx_frag->fr_literal;
+  long val = *valP;
+
+  switch (fixP->fx_r_type)
+  {
+    case BFD_RELOC_32:
+      md_number_to_chars (where, val, 4);
+      break;
+
+    default:
+      as_bad_where (fixP->fx_file, fixP->fx_line,
+          _("internal error: can't install fix for reloc type %d (`%s')"),
+          fixP->fx_r_type, bfd_get_reloc_code_name (fixP->fx_r_type));
+      abort ();
+  }
+
+  if (fixP->fx_addsy == NULL && fixP->fx_pcrel == 0)
+    fixP->fx_done = 1;
 }
 
 /* Put number into target byte order (big endian).  */
@@ -211,6 +228,30 @@ tc_gen_reloc (asection *section ATTRIBUTE_UNUSED, fixS *fixp)
     }
 
   return rel;
+}
+
+/* The location from which a PC relative jump should be calculated, given a PC relative reloc. */
+long
+md_pcrel_from_section (fixS * fixP, segT sec)
+{
+  if (fixP->fx_addsy != (symbolS *) NULL
+      && (! S_IS_DEFINED (fixP->fx_addsy)
+	  || S_GET_SEGMENT (fixP->fx_addsy) != sec
+          || S_IS_EXTERNAL (fixP->fx_addsy)
+          || S_IS_WEAK (fixP->fx_addsy)))
+    {
+      if (S_GET_SEGMENT (fixP->fx_addsy) != sec
+          && S_IS_DEFINED (fixP->fx_addsy)
+          && ! S_IS_EXTERNAL (fixP->fx_addsy)
+          && ! S_IS_WEAK (fixP->fx_addsy))
+        return fixP->fx_offset;
+
+    /* The symbol is undefined (or is defined but not in this section).
+       Let the linker figure it out. */
+    return 0;
+  }
+
+  return (fixP->fx_frag->fr_address + fixP->fx_where) & ~3;
 }
 
 /* Return the bfd reloc type for OPERAND of INSN at fixup FIXP.
