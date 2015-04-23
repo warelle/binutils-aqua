@@ -608,6 +608,12 @@ aqua_cgen_insert_operand (CGEN_CPU_DESC cd,
     case AQUA_OPERAND_IMM21N :
       errmsg = insert_normal (cd, fields->f_imm21_n, 0, 0, 20, 21, 32, total_length, buffer);
       break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      errmsg = insert_normal (cd, fields->f_imm21_n, 0, 0, 20, 21, 32, total_length, buffer);
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
+      errmsg = insert_normal (cd, fields->f_imm21_n, 0, 0, 20, 21, 32, total_length, buffer);
+      break;
     case AQUA_OPERAND_RA :
       errmsg = insert_normal (cd, fields->f_ra, 0, 0, 20, 5, 32, total_length, buffer);
       break;
@@ -697,6 +703,12 @@ aqua_cgen_extract_operand (CGEN_CPU_DESC cd,
     case AQUA_OPERAND_IMM21N :
       length = extract_normal (cd, ex_info, insn_value, 0, 0, 20, 21, 32, total_length, pc, & fields->f_imm21_n);
       break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 20, 21, 32, total_length, pc, & fields->f_imm21_n);
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 20, 21, 32, total_length, pc, & fields->f_imm21_n);
+      break;
     case AQUA_OPERAND_RA :
       length = extract_normal (cd, ex_info, insn_value, 0, 0, 20, 5, 32, total_length, pc, & fields->f_ra);
       break;
@@ -765,6 +777,12 @@ aqua_cgen_get_int_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
     case AQUA_OPERAND_IMM21N :
       value = fields->f_imm21_n;
       break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      value = fields->f_imm21_n;
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
+      value = fields->f_imm21_n;
+      break;
     case AQUA_OPERAND_RA :
       value = fields->f_ra;
       break;
@@ -813,6 +831,12 @@ aqua_cgen_get_vma_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
       value = fields->f_imm21_c;
       break;
     case AQUA_OPERAND_IMM21N :
+      value = fields->f_imm21_n;
+      break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      value = fields->f_imm21_n;
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
       value = fields->f_imm21_n;
       break;
     case AQUA_OPERAND_RA :
@@ -872,6 +896,12 @@ aqua_cgen_set_int_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
     case AQUA_OPERAND_IMM21N :
       fields->f_imm21_n = value;
       break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      fields->f_imm21_n = value;
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
+      fields->f_imm21_n = value;
+      break;
     case AQUA_OPERAND_RA :
       fields->f_ra = value;
       break;
@@ -917,6 +947,12 @@ aqua_cgen_set_vma_operand (CGEN_CPU_DESC cd ATTRIBUTE_UNUSED,
       fields->f_imm21_c = value;
       break;
     case AQUA_OPERAND_IMM21N :
+      fields->f_imm21_n = value;
+      break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      fields->f_imm21_n = value;
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
       fields->f_imm21_n = value;
       break;
     case AQUA_OPERAND_RA :

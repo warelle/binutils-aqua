@@ -45,7 +45,7 @@ This file is part of the GNU Binutils and/or GDB, the GNU debugger.
 #define CGEN_INT_INSN_P 0
 
 /* Maximum number of syntax elements in an instruction.  */
-#define CGEN_ACTUAL_MAX_SYNTAX_ELEMENTS 13
+#define CGEN_ACTUAL_MAX_SYNTAX_ELEMENTS 14
 
 /* CGEN_MNEMONIC_OPERANDS is defined if mnemonics have operands.
    e.g. In "b,a foo" the ",a" is an operand.  If mnemonics have operands
@@ -53,7 +53,7 @@ This file is part of the GNU Binutils and/or GDB, the GNU debugger.
 #define CGEN_MNEMONIC_OPERANDS
 
 /* Maximum number of fields in an instruction.  */
-#define CGEN_ACTUAL_MAX_IFMT_OPERANDS 5
+#define CGEN_ACTUAL_MAX_IFMT_OPERANDS 6
 
 /* Enums.  */
 
@@ -229,12 +229,13 @@ typedef enum cgen_operand_attr {
 /* Enum declaration for aqua operand types.  */
 typedef enum cgen_operand_type {
   AQUA_OPERAND_PC, AQUA_OPERAND_RD, AQUA_OPERAND_RA, AQUA_OPERAND_RB
- , AQUA_OPERAND_IMM21N, AQUA_OPERAND_IMM21C, AQUA_OPERAND_IMM16L, AQUA_OPERAND_IMM16S
- , AQUA_OPERAND_IMM12I, AQUA_OPERAND_FUNC1, AQUA_OPERAND_FUNC2, AQUA_OPERAND_MAX
+ , AQUA_OPERAND_IMM21C, AQUA_OPERAND_IMM16L, AQUA_OPERAND_IMM16S, AQUA_OPERAND_IMM12I
+ , AQUA_OPERAND_FUNC1, AQUA_OPERAND_FUNC2, AQUA_OPERAND_IMM21N, AQUA_OPERAND_IMM21N_LOW
+ , AQUA_OPERAND_IMM21N_HIGH, AQUA_OPERAND_MAX
 } CGEN_OPERAND_TYPE;
 
 /* Number of operands types.  */
-#define MAX_OPERANDS 11
+#define MAX_OPERANDS 13
 
 /* Maximum number of operands referenced by any insn.  */
 #define MAX_OPERAND_INSTANCES 8

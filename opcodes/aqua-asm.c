@@ -49,28 +49,93 @@ static const char * parse_insn_normal
 /* -- assembler routines inserted here.  */
 
 /* -- asm.c */
-/*
 static const char * MISSING_CLOSING_PARENTHESIS = N_("missing `)'");
 
 #define CGEN_VERBOSE_ASSEMBLER_ERRORS
 
-static const char *
-parse_default (CGEN_CPU_DESC cd,
-            const char ** strp,
-            int opindex,
-            long * valuep)
-{
-  const char *errmsg;
-
-  fprintf(stderr, "default");
-  errmsg = cgen_parse_signed_integer (cd, strp, opindex, valuep);
-
-  return errmsg;
-}
+//// high() macro
+//static const char *
+//parse_hi16 (CGEN_CPU_DESC cd,
+//            const char ** strp,
+//            int opindex,
+//            long * valuep)
+//{
+//  const char *errmsg;
+//  enum cgen_parse_operand_result result_type;
+//  unsigned long ret;
+//
+//  if (**strp == '#')
+//    ++*strp;
+//
+//  if (strncasecmp (*strp, "high(", 5) == 0)
+//    {
+//      bfd_vma value;
+//
+//      *strp += 5;
+//      errmsg = cgen_parse_address (cd, strp, opindex, BFD_RELOC_HI16,
+//				   & result_type, & value);
+//      if (**strp != ')')
+//        return MISSING_CLOSING_PARENTHESIS;
+//
+//      ++*strp;
+//      if (errmsg == NULL
+//          && result_type == CGEN_PARSE_OPERAND_RESULT_NUMBER)
+//        value >>= 16;
+//
+//      ret = value;
+//    }
+//  else
+//    {
+//      unsigned long value;
+//
+//      errmsg = cgen_parse_unsigned_integer (cd, strp, opindex, &value);
+//      ret = value;
+//    }
+//
+//  *valuep = (ret & 0x0000ffff);
+//  return errmsg;
+//}
+//
+//// low() macro
+//static const char *
+//parse_lo16 (CGEN_CPU_DESC cd,
+//            const char ** strp,
+//            int opindex,
+//            long * valuep)
+//{
+//  const char *errmsg;
+//  enum cgen_parse_operand_result result_type;
+//
+//  if (**strp == '#')
+//    ++*strp;
+//
+//  if (strncasecmp (*strp, "low(", 4) == 0)
+//    {
+//      bfd_vma value;
+//
+//      *strp += 4;
+//      errmsg = cgen_parse_address (cd, strp, opindex, BFD_RELOC_LO16,
+//				   & result_type, & value);
+//      if (**strp != ')')
+//        return MISSING_CLOSING_PARENTHESIS;
+//
+//      if (errmsg == NULL && result_type == CGEN_PARSE_OPERAND_RESULT_NUMBER)
+//        value = value & 0xffff;
+//      *valuep = value;
+//
+//      ++*strp;
+//    }
+//  else
+//    {
+//      errmsg = cgen_parse_signed_integer (cd, strp, opindex, valuep);
+//    }
+//
+//  return errmsg;
+//}
 
 // high() macro
 static const char *
-parse_hi16 (CGEN_CPU_DESC cd,
+parse_hi21 (CGEN_CPU_DESC cd,
             const char ** strp,
             int opindex,
             long * valuep)
@@ -87,7 +152,7 @@ parse_hi16 (CGEN_CPU_DESC cd,
       bfd_vma value;
 
       *strp += 5;
-      errmsg = cgen_parse_address (cd, strp, opindex, BFD_RELOC_HI16,
+      errmsg = cgen_parse_address (cd, strp, opindex, BFD_RELOC_AQUA_HI21,
 				   & result_type, & value);
       if (**strp != ')')
         return MISSING_CLOSING_PARENTHESIS;
@@ -95,7 +160,7 @@ parse_hi16 (CGEN_CPU_DESC cd,
       ++*strp;
       if (errmsg == NULL
           && result_type == CGEN_PARSE_OPERAND_RESULT_NUMBER)
-        value >>= 16;
+        value >>= 11;
 
       ret = value;
     }
@@ -107,20 +172,20 @@ parse_hi16 (CGEN_CPU_DESC cd,
       ret = value;
     }
 
-  *valuep = (ret & 0x0000ffff);
+  *valuep = (ret & 0x001fffff);
   return errmsg;
 }
 
 // low() macro
-
 static const char *
-parse_lo16 (CGEN_CPU_DESC cd,
+parse_lo21 (CGEN_CPU_DESC cd,
             const char ** strp,
             int opindex,
             long * valuep)
 {
   const char *errmsg;
   enum cgen_parse_operand_result result_type;
+  unsigned long ret;
 
   if (**strp == '#')
     ++*strp;
@@ -130,25 +195,28 @@ parse_lo16 (CGEN_CPU_DESC cd,
       bfd_vma value;
 
       *strp += 4;
-      errmsg = cgen_parse_address (cd, strp, opindex, BFD_RELOC_LO16,
+      errmsg = cgen_parse_address (cd, strp, opindex, BFD_RELOC_AQUA_LO21,
 				   & result_type, & value);
       if (**strp != ')')
         return MISSING_CLOSING_PARENTHESIS;
 
-      if (errmsg == NULL && result_type == CGEN_PARSE_OPERAND_RESULT_NUMBER)
-        value = ((value & 0xffff) ^ 0x8000) - 0x8000;
-      *valuep = value;
-
       ++*strp;
+      if (errmsg == NULL && result_type == CGEN_PARSE_OPERAND_RESULT_NUMBER)
+        value = value & 0x1fffff;
+
+      ret = value;
     }
   else
     {
-      errmsg = cgen_parse_signed_integer (cd, strp, opindex, valuep);
+      unsigned long value;
+
+      errmsg = cgen_parse_unsigned_integer (cd, strp, opindex, &value);
+      ret = value;
     }
 
+  *valuep = (ret & 0x001fffff);
   return errmsg;
 }
-*/
 /* -- */
 
 const char * aqua_cgen_parse_operand
@@ -199,6 +267,12 @@ aqua_cgen_parse_operand (CGEN_CPU_DESC cd,
       break;
     case AQUA_OPERAND_IMM21N :
       errmsg = cgen_parse_signed_integer (cd, strp, AQUA_OPERAND_IMM21N, (long *) (& fields->f_imm21_n));
+      break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      errmsg = parse_hi21 (cd, strp, AQUA_OPERAND_IMM21N_HIGH, (long *) (& fields->f_imm21_n));
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
+      errmsg = parse_lo21 (cd, strp, AQUA_OPERAND_IMM21N_LOW, (long *) (& fields->f_imm21_n));
       break;
     case AQUA_OPERAND_RA :
       errmsg = cgen_parse_keyword (cd, strp, & aqua_cgen_opval_h_gr, & fields->f_ra);

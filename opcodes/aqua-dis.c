@@ -112,6 +112,12 @@ aqua_cgen_print_operand (CGEN_CPU_DESC cd,
     case AQUA_OPERAND_IMM21N :
       print_normal (cd, info, fields->f_imm21_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
       break;
+    case AQUA_OPERAND_IMM21N_HIGH :
+      print_normal (cd, info, fields->f_imm21_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
+      break;
+    case AQUA_OPERAND_IMM21N_LOW :
+      print_normal (cd, info, fields->f_imm21_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
+      break;
     case AQUA_OPERAND_RA :
       print_keyword (cd, info, & aqua_cgen_opval_h_gr, fields->f_ra, 0);
       break;
