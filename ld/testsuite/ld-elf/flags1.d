@@ -2,7 +2,7 @@
 #ld: -Tflags1.ld
 #objcopy_linked_file: --set-section-flags .post_text_reserve=contents,alloc,load,readonly,code
 #readelf: -l --wide
-#xfail: "avr-*-*" "dlx-*-*" "h8300-*-*" "i960-*-*" "ip2k-*-*" "m32r-*-*"
+#xfail: "aqua-*-*" "avr-*-*" "dlx-*-*" "h8300-*-*" "i960-*-*" "ip2k-*-*" "m32r-*-*"
 #xfail: "moxie-*-*" "mt-*-*" "visium-*-*" "*-*-nacl*"
 #xfail: "*-*-hpux*" "hppa*64*-*-*"
 # Fails on the AVR, DLX, H8300, I960, IP2K, M32R, MOXIE, MT, VISIUM
