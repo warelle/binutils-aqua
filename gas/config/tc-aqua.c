@@ -170,64 +170,11 @@ md_show_usage (FILE *stream ATTRIBUTE_UNUSED)
 {
 }
 
-/* Apply a fixup to the object file.  */
-void
-md_apply_fix (fixS *fixP ATTRIBUTE_UNUSED, valueT * valP ATTRIBUTE_UNUSED, segT seg ATTRIBUTE_UNUSED)
-{
-  char *where = fixP->fx_where + fixP->fx_frag->fr_literal;
-  long val = *valP;
-
-  switch (fixP->fx_r_type)
-  {
-    case BFD_RELOC_32:
-      md_number_to_chars (where, val, 4);
-      break;
-
-    default:
-      as_bad_where (fixP->fx_file, fixP->fx_line,
-          _("internal error: can't install fix for reloc type %d (`%s')"),
-          fixP->fx_r_type, bfd_get_reloc_code_name (fixP->fx_r_type));
-      abort ();
-  }
-
-  if (fixP->fx_addsy == NULL && fixP->fx_pcrel == 0)
-    fixP->fx_done = 1;
-}
-
 /* Put number into target byte order (big endian).  */
 void
 md_number_to_chars (char *ptr, valueT use, int nbytes)
 {
   number_to_chars_bigendian (ptr, use, nbytes);
-}
-
-/* Translate internal representation of relocation info to BFD target format.  */
-arelent *
-tc_gen_reloc (asection *section ATTRIBUTE_UNUSED, fixS *fixp)
-{
-  arelent *rel;
-  bfd_reloc_code_real_type r_type;
-
-  rel = xmalloc (sizeof (arelent));
-  rel->sym_ptr_ptr = xmalloc (sizeof (asymbol *));
-  *rel->sym_ptr_ptr = symbol_get_bfdsym (fixp->fx_addsy);
-  rel->address = fixp->fx_frag->fr_address + fixp->fx_where;
-
-  r_type = fixp->fx_r_type;
-  rel->addend = fixp->fx_addnumber;
-  rel->howto = bfd_reloc_type_lookup (stdoutput, r_type);
-
-  if (rel->howto == NULL)
-    {
-      as_bad_where (fixp->fx_file, fixp->fx_line,
-		    _("Cannot represent relocation type %s"),
-		    bfd_get_reloc_code_name (r_type));
-      /* Set howto to a garbage value so that we can keep going.  */
-      rel->howto = bfd_reloc_type_lookup (stdoutput, BFD_RELOC_32);
-      //assert (rel->howto != NULL);
-    }
-
-  return rel;
 }
 
 /* The location from which a PC relative jump should be calculated, given a PC relative reloc. */
@@ -266,10 +213,14 @@ md_cgen_lookup_reloc (const CGEN_INSN *    insn ATTRIBUTE_UNUSED,
   fixP->fx_pcrel = 0;
 
   switch (operand->type)
-    {
-   default:
-      break;
-    }
+  {
+  case AQUA_OPERAND_IMM21N_LOW:
+    return BFD_RELOC_AQUA_LO21;
+  case AQUA_OPERAND_IMM21N_HIGH:
+    return BFD_RELOC_AQUA_HI21;
+  default:
+    break;
+  }
 
   return BFD_RELOC_NONE;
 }

@@ -91,6 +91,7 @@
 
 #include "elf/aarch64.h"
 #include "elf/alpha.h"
+#include "elf/aqua.h"
 #include "elf/arc.h"
 #include "elf/arm.h"
 #include "elf/avr.h"
@@ -721,6 +722,7 @@ guess_is_rela (unsigned int e_machine)
     case EM_ADAPTEVA_EPIPHANY:
     case EM_ALPHA:
     case EM_ALTERA_NIOS2:
+    case EM_AQUA:
     case EM_AVR:
     case EM_AVR_OLD:
     case EM_BLACKFIN:
@@ -1194,6 +1196,10 @@ dump_relocations (FILE * file,
 	case EM_960:
 	  rtype = elf_i960_reloc_type (type);
 	  break;
+
+  case EM_AQUA:
+    rtype = elf_aqua_reloc_type (type);
+    break;
 
 	case EM_AVR:
 	case EM_AVR_OLD:
@@ -2256,6 +2262,7 @@ get_machine_name (unsigned e_machine)
     case EM_TILEGX:		return "Tilera TILE-Gx multicore architecture family";
     case EM_CUDA:		return "NVIDIA CUDA architecture";
     case EM_XGATE:		return "Motorola XGATE embedded processor";
+    case EM_AQUA:   return "AQUA architectire";
     default:
       snprintf (buff, sizeof (buff), _("<unknown>: 0x%x"), e_machine);
       return buff;
@@ -11373,6 +11380,8 @@ is_32bit_abs_reloc (unsigned int reloc_type)
     case EM_XTENSA_OLD:
     case EM_XTENSA:
       return reloc_type == 1; /* R_XTENSA_32.  */
+    case EM_AQUA:
+      return reloc_type == 1; /* R_AQUA_32. */
     default:
       {
 	static unsigned int prev_warn = 0;
@@ -14073,7 +14082,7 @@ process_mips_specific (FILE * file)
 		  return 0;
 		}
 	      offset += option->size;
-		
+
 	      ++option;
 	      ++cnt;
 	    }
@@ -14969,7 +14978,7 @@ print_v850_note (Elf_Internal_Note * pnote)
 	case EF_RH850_DATA_ALIGN8: printf (_("8-byte\n")); return 1;
 	}
       break;
-	
+
     case V850_NOTE_DATA_SIZE:
       switch (val)
 	{
@@ -14977,7 +14986,7 @@ print_v850_note (Elf_Internal_Note * pnote)
 	case EF_RH850_DOUBLE64: printf (_("8-bytes\n")); return 1;
 	}
       break;
-	
+
     case V850_NOTE_FPU_INFO:
       switch (val)
 	{
@@ -14985,7 +14994,7 @@ print_v850_note (Elf_Internal_Note * pnote)
 	case EF_RH850_FPU30: printf (_("FPU-3.0\n")); return 1;
 	}
       break;
-	
+
     case V850_NOTE_MMU_INFO:
     case V850_NOTE_CACHE_INFO:
     case V850_NOTE_SIMD_INFO:
@@ -15346,7 +15355,7 @@ process_corefile_note_segment (FILE * file, bfd_vma offset, bfd_vma length)
 	      inote.descdata = inote.namedata;
 	      inote.namesz   = 0;
 	    }
- 
+
 	  inote.descpos  = offset + (inote.descdata - (char *) pnotes);
 	  next = inote.descdata + align_power (inote.descsz, 2);
 	}

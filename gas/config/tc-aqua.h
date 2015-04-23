@@ -40,4 +40,5 @@
 extern long md_pcrel_from_section (struct fix *, segT);
 
 #define md_section_align(SEGMENT, SIZE)     (SIZE)
-
+#define md_apply_fix gas_cgen_md_apply_fix
+#define tc_gen_reloc gas_cgen_tc_gen_reloc

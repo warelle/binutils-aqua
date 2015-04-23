@@ -23,58 +23,6 @@
 #include "elf-bfd.h"
 #include "elf/aqua.h"
 
-/* This function is used for normal relocs. */
-static bfd_reloc_status_type
-aqua_elf_reloc (bfd *abfd,
-		 arelent *reloc_entry,
-		 asymbol *symbol_in,
-		 void * data,
-		 asection *input_section,
-		 bfd *output_bfd,
-		 char **error_message ATTRIBUTE_UNUSED)
-{
-  unsigned long insn;
-  bfd_vma sym_value;
-  enum elf_aqua_reloc_type r_type;
-  bfd_vma addr = reloc_entry->address;
-  bfd_byte *hit_data = addr + (bfd_byte *) data;
-
-  r_type = (enum elf_aqua_reloc_type) reloc_entry->howto->type;
-
-  if (output_bfd != NULL)
-    {
-      /* Partial linking--do nothing.  */
-      reloc_entry->address += input_section->output_offset;
-      return bfd_reloc_ok;
-    }
-
-  if (symbol_in != NULL
-      && bfd_is_und_section (symbol_in->section))
-    return bfd_reloc_undefined;
-
-  if (bfd_is_com_section (symbol_in->section))
-    sym_value = 0;
-  else
-    sym_value = (symbol_in->value +
-		 symbol_in->section->output_section->vma +
-		 symbol_in->section->output_offset);
-
-  switch (r_type)
-    {
-    case R_AQUA_32:
-      insn = bfd_get_32 (abfd, hit_data);
-      insn += sym_value + reloc_entry->addend;
-      bfd_put_32 (abfd, (bfd_vma) insn, hit_data);
-      break;
-
-    default:
-      abort ();
-      break;
-    }
-
-  return bfd_reloc_ok;
-}
-
 static reloc_howto_type aqua_elf_howto_table[] =
 {
   /* No relocation.  */
@@ -85,7 +33,7 @@ static reloc_howto_type aqua_elf_howto_table[] =
 	 FALSE,			/* pc_relative */
 	 0,			/* bitpos */
 	 complain_overflow_dont, /* complain_on_overflow */
-	 aqua_elf_reloc,	        /* special_function */
+	 bfd_elf_generic_reloc,	        /* special_function */
 	 "R_AQUA_NONE",	        /* name */
 	 FALSE,			/* partial_inplace */
 	 0,			/* src_mask */
@@ -100,12 +48,72 @@ static reloc_howto_type aqua_elf_howto_table[] =
 	 FALSE,			/* pc_relative */
 	 0,			/* bitpos */
 	 complain_overflow_bitfield, /* complain_on_overflow */
-	 aqua_elf_reloc,		/* special_function */
+	 bfd_elf_generic_reloc,		/* special_function */
 	 "R_AQUA_32",		/* name */
 	 FALSE,			/* partial_inplace */
 	 0x00000000,		/* src_mask */
 	 0xffffffff,		/* dst_mask */
 	 FALSE),		/* pcrel_offset */
+
+  /* 16 bit high absolute relocation. */
+  HOWTO (R_AQUA_16_HIGH,	        /* type */
+	 16,			/* rightshift */
+	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+	 16,			/* bitsize */
+	 FALSE,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_bitfield, /* complain_on_overflow */
+	 bfd_elf_generic_reloc,		/* special_function */
+	 "R_AQUA_16_HIGH",		/* name */
+	 FALSE,			/* partial_inplace */
+	 0x00000000,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 FALSE),		/* pcrel_offset */
+
+  /* 16 bit low absolute relocation. */
+  HOWTO (R_AQUA_16_LOW,	        /* type */
+	 0,			/* rightshift */
+	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+	 16,			/* bitsize */
+	 FALSE,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_bitfield, /* complain_on_overflow */
+	 bfd_elf_generic_reloc,		/* special_function */
+	 "R_AQUA_16_LOW",		/* name */
+	 FALSE,			/* partial_inplace */
+	 0x00000000,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 FALSE),		/* pcrel_offset */
+
+  /* 21 bit high absolute relocation. */
+  HOWTO (R_AQUA_21_HIGH,	        /* type */
+	 11,			/* rightshift */
+	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+	 21,			/* bitsize */
+	 FALSE,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_bitfield, /* complain_on_overflow */
+	 bfd_elf_generic_reloc,		/* special_function */
+	 "R_AQUA_21_HIGH",		/* name */
+	 FALSE,			/* partial_inplace */
+	 0x00000000,		/* src_mask */
+	 0x001fffff,		/* dst_mask */
+	 FALSE),		/* pcrel_offset */
+
+  /* 21 bit low absolute relocation. */
+  HOWTO (R_AQUA_21_LOW,	        /* type */
+	 0,			/* rightshift */
+	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+	 21,			/* bitsize */
+	 FALSE,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_bitfield, /* complain_on_overflow */
+	 bfd_elf_generic_reloc,		/* special_function */
+	 "R_AQUA_21_LOW",		/* name */
+	 FALSE,			/* partial_inplace */
+	 0x00000000,		/* src_mask */
+	 0x001fffff,		/* dst_mask */
+	 FALSE)		/* pcrel_offset */
 };
 
 /* This structure is used to map BFD reloc codes to aqua elf relocs.  */
@@ -121,7 +129,11 @@ struct elf_reloc_map
 static const struct elf_reloc_map aqua_reloc_map[] =
 {
     { BFD_RELOC_NONE, 		R_AQUA_NONE  },
-    { BFD_RELOC_32, 		R_AQUA_32      }
+    { BFD_RELOC_32, 		R_AQUA_32      },
+    { BFD_RELOC_HI16,   R_AQUA_16_HIGH },
+    { BFD_RELOC_LO16,   R_AQUA_16_LOW  },
+    { BFD_RELOC_AQUA_HI21, R_AQUA_21_HIGH },
+    { BFD_RELOC_AQUA_LO21, R_AQUA_21_LOW  }
 };
 
 /* Given a BFD reloc code, return the howto structure for the
