@@ -122,7 +122,7 @@
 (dnh h-gr "general registers"
      () ; attributes
      (register WI (32))
-     (keyword "" ((ra 28) (rsp 30) (rbp 31)
+     (keyword "" ((rbp 27) (rsp 28) (rra 29) (rtp 30) (rgp 31)
                   (r0 0) (r1 1) (r2 2) (r3 3)
                   (r4 4) (r5 5) (r6 6) (r7 7)
                   (r8 8) (r9 9) (r10 10) (r11 11)
@@ -243,7 +243,7 @@
    (.str mnemonic " imm12i")
    ()
    (.str mnemonic " $imm12i")
-   (+ OP_30 RD_0 RA_0 imm12i tag)
+   (+ OP_48 RD_0 RA_0 imm12i tag)
    ()
    ()
   )
