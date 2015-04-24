@@ -177,6 +177,13 @@ md_number_to_chars (char *ptr, valueT use, int nbytes)
   number_to_chars_bigendian (ptr, use, nbytes);
 }
 
+valueT
+md_section_align (segT segment, valueT size)
+{
+  int align = bfd_get_section_alignment (stdoutput, segment);
+  return ((size + (1 << align) - 1) & (-1 << align));
+}
+
 /* The location from which a PC relative jump should be calculated, given a PC relative reloc. */
 long
 md_pcrel_from_section (fixS * fixP, segT sec)

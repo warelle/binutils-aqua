@@ -28,8 +28,8 @@ static reloc_howto_type aqua_elf_howto_table[] =
   /* No relocation.  */
   HOWTO (R_AQUA_NONE,		/* type */
 	 0,			/* rightshift */
-	 0,			/* size (0 = byte, 1 = short, 2 = long) */
-	 0,			/* bitsize */
+	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+	 32,			/* bitsize */
 	 FALSE,			/* pc_relative */
 	 0,			/* bitpos */
 	 complain_overflow_dont, /* complain_on_overflow */
@@ -407,6 +407,7 @@ aqua_elf_check_relocs (bfd *abfd,
 #define ELF_MAXPAGESIZE  	1
 #define bfd_elf32_bfd_reloc_type_lookup aqua_elf_reloc_type_lookup
 #define bfd_elf32_bfd_reloc_name_lookup aqua_elf_reloc_name_lookup
+#define elf_info_to_howto_rel			NULL
 #define elf_info_to_howto		            aqua_elf_info_to_howto
 #define elf_backend_relocate_section		aqua_elf_relocate_section
 #define elf_backend_gc_mark_hook		    aqua_elf_gc_mark_hook
