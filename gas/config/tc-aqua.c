@@ -170,13 +170,6 @@ md_show_usage (FILE *stream ATTRIBUTE_UNUSED)
 {
 }
 
-/* Apply a fixup to the object file.  */
-void
-md_apply_fix (fixS *fixP ATTRIBUTE_UNUSED, valueT * valP ATTRIBUTE_UNUSED, segT seg ATTRIBUTE_UNUSED)
-{
-  /* Empty for now.  */
-}
-
 /* Put number into target byte order (big endian).  */
 void
 md_number_to_chars (char *ptr, valueT use, int nbytes)
@@ -184,33 +177,35 @@ md_number_to_chars (char *ptr, valueT use, int nbytes)
   number_to_chars_bigendian (ptr, use, nbytes);
 }
 
-/* Translate internal representation of relocation info to BFD target format.  */
-arelent *
-tc_gen_reloc (asection *section ATTRIBUTE_UNUSED, fixS *fixp)
+valueT
+md_section_align (segT segment, valueT size)
 {
-  arelent *rel;
-  bfd_reloc_code_real_type r_type;
+  int align = bfd_get_section_alignment (stdoutput, segment);
+  return ((size + (1 << align) - 1) & (-1 << align));
+}
 
-  rel = xmalloc (sizeof (arelent));
-  rel->sym_ptr_ptr = xmalloc (sizeof (asymbol *));
-  *rel->sym_ptr_ptr = symbol_get_bfdsym (fixp->fx_addsy);
-  rel->address = fixp->fx_frag->fr_address + fixp->fx_where;
-
-  r_type = fixp->fx_r_type;
-  rel->addend = fixp->fx_addnumber;
-  rel->howto = bfd_reloc_type_lookup (stdoutput, r_type);
-
-  if (rel->howto == NULL)
+/* The location from which a PC relative jump should be calculated, given a PC relative reloc. */
+long
+md_pcrel_from_section (fixS * fixP, segT sec)
+{
+  if (fixP->fx_addsy != (symbolS *) NULL
+      && (! S_IS_DEFINED (fixP->fx_addsy)
+	  || S_GET_SEGMENT (fixP->fx_addsy) != sec
+          || S_IS_EXTERNAL (fixP->fx_addsy)
+          || S_IS_WEAK (fixP->fx_addsy)))
     {
-      as_bad_where (fixp->fx_file, fixp->fx_line,
-		    _("Cannot represent relocation type %s"),
-		    bfd_get_reloc_code_name (r_type));
-      /* Set howto to a garbage value so that we can keep going.  */
-      rel->howto = bfd_reloc_type_lookup (stdoutput, BFD_RELOC_32);
-      //assert (rel->howto != NULL);
-    }
+      if (S_GET_SEGMENT (fixP->fx_addsy) != sec
+          && S_IS_DEFINED (fixP->fx_addsy)
+          && ! S_IS_EXTERNAL (fixP->fx_addsy)
+          && ! S_IS_WEAK (fixP->fx_addsy))
+        return fixP->fx_offset;
 
-  return rel;
+    /* The symbol is undefined (or is defined but not in this section).
+       Let the linker figure it out. */
+    return 0;
+  }
+
+  return (fixP->fx_frag->fr_address + fixP->fx_where) & ~3;
 }
 
 /* Return the bfd reloc type for OPERAND of INSN at fixup FIXP.
@@ -225,10 +220,14 @@ md_cgen_lookup_reloc (const CGEN_INSN *    insn ATTRIBUTE_UNUSED,
   fixP->fx_pcrel = 0;
 
   switch (operand->type)
-    {
-   default:
-      break;
-    }
+  {
+  case AQUA_OPERAND_IMM21N_LOW:
+    return BFD_RELOC_AQUA_LO21;
+  case AQUA_OPERAND_IMM21N_HIGH:
+    return BFD_RELOC_AQUA_HI21;
+  default:
+    break;
+  }
 
   return BFD_RELOC_NONE;
 }

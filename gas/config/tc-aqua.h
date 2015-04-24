@@ -28,6 +28,7 @@
 #define TARGET_ARCH bfd_arch_aqua
 
 #define md_undefined_symbol(NAME)           0
+#define MD_APPLY_SYM_VALUE(FIX) 0
 
 /* These macros must be defined, but is will be a fatal assembler
    error if we ever hit them.  */
@@ -36,8 +37,8 @@
 
 /* PC relative operands are relative to the start of the opcode, and
    the operand is always one byte into the opcode.  */
-#define md_pcrel_from(FIX) 						\
-	((FIX)->fx_where + (FIX)->fx_frag->fr_address - 1)
+#define MD_PCREL_FROM_SECTION(FIX, SEC) md_pcrel_from_section (FIX, SEC)
+extern long md_pcrel_from_section (struct fix *, segT);
 
-#define md_section_align(SEGMENT, SIZE)     (SIZE)
-
+#define md_apply_fix gas_cgen_md_apply_fix
+#define tc_gen_reloc gas_cgen_tc_gen_reloc

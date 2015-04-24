@@ -39,7 +39,7 @@ proc sec_to_seg_test { testname scriptname same_seg } {
     global ld
     global exec_output
     global READELF
-    
+
     if {! [ld_simple_link $ld tmpdir/sec-to-seg "-T $srcdir/$subdir/$scriptname tmpdir/sec-to-seg1.o tmpdir/sec-to-seg2.o"] } then {
 	fail $testname
 	return 0
@@ -74,7 +74,8 @@ proc sec_to_seg_test { testname scriptname same_seg } {
 
 # These targets have a pagesize of 1, so they will always end up
 # placing the two sections in separate segments in the B test.
-if {    [istarget avr-*-*]
+if {    [istarget aqua-*-*]
+     || [istarget avr-*-*]
      || [istarget cr16-*-*]
      || [istarget crx-*-*]
      || [istarget dlx-*-*]

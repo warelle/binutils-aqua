@@ -1,0 +1,5 @@
+# AQUA assembler testsuite. -*- Tcl -*-
+
+if [istarget aqua*-*-*] {
+    run_dump_test "allinsn"
+}

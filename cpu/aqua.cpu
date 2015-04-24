@@ -71,7 +71,7 @@
 
 (dnf f-imm21-n      "imm21-n"        () 20 21)
 (dnf f-imm16-l      "imm16-l"        () 15 16)
-(dnf f-imm12-i      "imm12-i"        () 16 12)
+(dnf f-imm12-i      "imm12-i"        () 15 12)
 (dnf f-imm21-c-high "imm21-c-high"   () 25 5)
 (dnf f-imm21-c-low  "imm21-c-low"    () 15 16)
 (dnmf f-imm21-c     "imm21-c"        () INT
@@ -122,7 +122,7 @@
 (dnh h-gr "general registers"
      () ; attributes
      (register WI (32))
-     (keyword "" ((ra 28) (rsp 30) (rbp 31)
+     (keyword "" ((rbp 27) (rsp 28) (rra 29) (rtp 30) (rgp 31)
                   (r0 0) (r1 1) (r2 2) (r3 3)
                   (r4 4) (r5 5) (r6 6) (r7 7)
                   (r8 8) (r9 9) (r10 10) (r11 11)
@@ -145,7 +145,6 @@
 (dnop rd            "destination register"         () h-gr f-rd)
 (dnop ra           "source register 1"            () h-gr f-ra)
 (dnop rb           "source register 2"            () h-gr f-rb)
-(dnop imm21n        "21bit immediate value n-form" () h-int21 f-imm21-n)
 (dnop imm21c        "21bit immediate value c-form" () h-int21 f-imm21-c)
 (dnop imm16l        "16bit immediate value k-form" () h-int16 f-imm16-l)
 (dnop imm16s        "16bit immediate value s-form" () h-int16 f-imm16-s)
@@ -153,30 +152,23 @@
 (dnop func1         "func1"                        () h-uint4 f-func1)
 (dnop func2         "func2"                        () h-uint7 f-func2)
 
-;(define-operand
-;  (name imm16)
-;  (comment "16 bit immediate")
-;  (attrs)
-;  (type h-int16)
-;  (index f-displacement)
-;  (handlers (parse "default"))
-;)
-;(define-operand
-;  (name imm16low)
-;  (comment "low 16 bit immediate")
-;  (attrs)
-;  (type h-int16)
-;  (index f-displacement)
-;  (handlers (parse "lo16"))
-;)
-;(define-operand
-;  (name imm16high)
-;  (comment "high 16 bit immediate")
-;  (attrs)
-;  (type h-int16)
-;  (index f-displacement)
-;  (handlers (parse "hi16"))
-;)
+(dnop imm21n        "21bit immediate value n-form" () h-int21 f-imm21-n)
+(define-operand
+  (name imm21n-low)
+  (comment "low 21 bit immediate value n-form")
+  (attrs)
+  (type h-int21)
+  (index f-imm21-n)
+  (handlers (parse "lo21"))
+)
+(define-operand
+  (name imm21n-high)
+  (comment "high 21 bit immediate value n-form")
+  (attrs)
+  (type h-int21)
+  (index f-imm21-n)
+  (handlers (parse "hi21"))
+)
 
 ; Instruction
 ; Instruction - behaviour
@@ -192,13 +184,11 @@
    ()
    ()
   )
- )
- (begin
   (dni (.sym mnemonic "i")
-   (.str mnemonic " reg/reg/imm16l")
+   (.str mnemonic "i reg/reg/imm12i")
    ()
-   (.str mnemonic " $rd,$ra,$imm16l")
-   (+ OP_0 r1 r2 imm16l tag)
+   (.str mnemonic "i $rd,$ra,$imm12i")
+   (+ OP_0 r1 r2 imm12i tag)
    ()
    ()
   )
@@ -228,13 +218,11 @@
    ()
    ()
   )
- )
- (begin
   (dni (.sym mnemonic "i")
-   (.str mnemonic " reg/reg/imm16l")
+   (.str mnemonic "i reg/reg/imm12i")
    ()
-   (.str mnemonic " $rd,$ra,$imm16l")
-   (+ OP_6 r1 r2 imm16l tag)
+   (.str mnemonic "i $rd,$ra,$imm12i")
+   (+ OP_6 r1 r2 imm12i tag)
    ()
    ()
   )
@@ -255,7 +243,7 @@
    (.str mnemonic " imm12i")
    ()
    (.str mnemonic " $imm12i")
-   (+ OP_30 RD_0 RA_0 imm12i tag)
+   (+ OP_48 RD_0 RA_0 imm12i tag)
    ()
    ()
   )
@@ -264,21 +252,21 @@
 (sys-op sysenter  FUNC1_0)
 (sys-op sysexit   FUNC1_1)
 
-(define-pmacro (n-op mnemonic opcode r1 imm)
+(define-pmacro (n-op mnemonic opcode r1 imm com1 com2)
  (begin
   (dni mnemonic
-   (.str mnemonic " reg/imm21n")
+   (.str mnemonic com1)
    ()
-   (.str mnemonic " $rd,$imm21n")
+   (.str mnemonic com2)
    (+ opcode r1 imm)
    ()
    ()
   )
  )
 )
-(n-op li  OP_18 rd imm21n)
-(n-op lih OP_19 rd imm21n)
-(n-op jl  OP_32 rd imm21n)
+(n-op li  OP_18 rd imm21n-low   " reg/imm21n-low"  " $rd,$imm21n")
+(n-op lih OP_19 rd imm21n-high  " reg/imm21n-high" " $rd,$imm21n")
+(n-op jl  OP_32 rd imm21n       " reg/imm21n"      " $rd,$imm21n")
 
 (define-pmacro (l-op mnemonic opcode r1 r2 imm)
  (begin
@@ -327,4 +315,19 @@
 (c-op jle  OP_43 ra imm21c)
 (c-op jgt  OP_44 ra imm21c)
 (c-op jge  OP_45 ra imm21c)
+
+; instruction nop
+(define-pmacro (nop-op mnemonic)
+ (begin
+  (dni mnemonic
+   (.str mnemonic)
+   ()
+   (.str mnemonic)
+   (+ OP_0 RD_0 RA_0 RB_0 FUNC2_0 FUNC1_0)
+   ()
+   ()
+  )
+ )
+)
+(nop-op nop)
 
