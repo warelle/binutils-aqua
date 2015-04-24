@@ -40,9 +40,9 @@ This file is part of the GNU Binutils and/or GDB, the GNU debugger.
 #define CGEN_MIN_INSN_SIZE 4
 
 /* Maximum size of any insn (in bytes).  */
-#define CGEN_MAX_INSN_SIZE 5
+#define CGEN_MAX_INSN_SIZE 4
 
-#define CGEN_INT_INSN_P 0
+#define CGEN_INT_INSN_P 1
 
 /* Maximum number of syntax elements in an instruction.  */
 #define CGEN_ACTUAL_MAX_SYNTAX_ELEMENTS 14

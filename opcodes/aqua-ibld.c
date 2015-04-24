@@ -572,7 +572,7 @@ aqua_cgen_insert_operand (CGEN_CPU_DESC cd,
       errmsg = insert_normal (cd, fields->f_func2, 0, 0, 10, 7, 32, total_length, buffer);
       break;
     case AQUA_OPERAND_IMM12I :
-      errmsg = insert_normal (cd, fields->f_imm12_i, 0, 0, 16, 12, 32, total_length, buffer);
+      errmsg = insert_normal (cd, fields->f_imm12_i, 0, 0, 15, 12, 32, total_length, buffer);
       break;
     case AQUA_OPERAND_IMM16L :
       errmsg = insert_normal (cd, fields->f_imm16_l, 0, 0, 15, 16, 32, total_length, buffer);
@@ -673,7 +673,7 @@ aqua_cgen_extract_operand (CGEN_CPU_DESC cd,
       length = extract_normal (cd, ex_info, insn_value, 0, 0, 10, 7, 32, total_length, pc, & fields->f_func2);
       break;
     case AQUA_OPERAND_IMM12I :
-      length = extract_normal (cd, ex_info, insn_value, 0, 0, 16, 12, 32, total_length, pc, & fields->f_imm12_i);
+      length = extract_normal (cd, ex_info, insn_value, 0, 0, 15, 12, 32, total_length, pc, & fields->f_imm12_i);
       break;
     case AQUA_OPERAND_IMM16L :
       length = extract_normal (cd, ex_info, insn_value, 0, 0, 15, 16, 32, total_length, pc, & fields->f_imm16_l);
