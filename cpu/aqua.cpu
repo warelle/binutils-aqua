@@ -171,9 +171,7 @@
 )
 
 ; Instruction
-; Instruction - behaviour
-
-; Instruction - native instruction definition
+; Instruction - ALU operation
 (define-pmacro (alu-op mnemonic tag r1 r2 r3)
  (begin
   (dni mnemonic
@@ -181,7 +179,7 @@
    ()
    (.str mnemonic " $rd,$ra,$rb")
    (+ OP_1 r1 r2 r3 FUNC2_0 tag)
-   ()
+   (set r1 (mnemonic r2 r3))
    ()
   )
   (dni (.sym mnemonic "i")
@@ -189,7 +187,7 @@
    ()
    (.str mnemonic "i $rd,$ra,$imm12i")
    (+ OP_0 r1 r2 imm12i tag)
-   ()
+   (set r1 (mnemonic r2 imm12i))
    ()
   )
  )
@@ -203,19 +201,76 @@
 (alu-op and    FUNC1_5  rd ra rb)
 (alu-op or     FUNC1_6  rd ra rb)
 (alu-op xor    FUNC1_7  rd ra rb)
-(alu-op addx4  FUNC1_8  rd ra rb)
-(alu-op subx4  FUNC1_9  rd ra rb)
 (alu-op mul    FUNC1_10 rd ra rb)
-(alu-op mulh   FUNC1_11 rd ra rb)
 
-(define-pmacro (cmp-op mnemonic tag r1 r2 r3)
+(define-pmacro (alu-x4-op mnemonic tag r1 r2 r3)
+ (begin
+  (dni (mnemonic "x4")
+   (.str mnemonic "x4 reg/reg/reg")
+   ()
+   (.str mnemonic "x4 $rd,$ra,$rb")
+   (+ OP_1 r1 r2 r3 FUNC2_0 tag)
+   (set r1 (mnemonic r2 (mul r3 (const 4))))
+   ()
+  )
+  (dni (.sym mnemonic "x4i")
+   (.str mnemonic "x4i reg/reg/imm12i")
+   ()
+   (.str mnemonic "x4i $rd,$ra,$imm12i")
+   (+ OP_0 r1 r2 imm12i tag)
+   (set r1 (mnemonic r2 (mul imm12i (const 4))))
+   ()
+  )
+ )
+)
+(alu-x4-op add  FUNC1_8  rd ra rb)
+(alu-x4-op sub  FUNC1_9  rd ra rb)
+
+(define-pmacro (mulh-op mnemonic tag r1 r2 r3)
+ (begin
+  (dni mnemonic
+   (.str mnemonic " reg/reg/reg")
+   ()
+   (.str mnemonic " $rd,$ra,$rb")
+   (+ OP_1 r1 r2 r3 FUNC2_0 tag)
+   (set r1
+    (sra DI
+     (sll DI
+      (mul DI
+       (ext DI (and WI r2 (const #xffff0000)))
+       (ext DI (trunc HI (sra WI r3 (const 16)))))
+      (const 16))
+     (const 16)))
+   ()
+  )
+  (dni (.sym mnemonic "i")
+   (.str mnemonic "i reg/reg/imm12i")
+   ()
+   (.str mnemonic "i $rd,$ra,$imm12i")
+   (+ OP_0 r1 r2 imm12i tag)
+   (set r1
+    (sra DI
+     (sll DI
+      (mul DI
+       (ext DI (and WI r2 (const #xffff0000)))
+       (ext DI (trunc HI (sra WI imm12i (const 16)))))
+      (const 16))
+     (const 16)))
+   ()
+  )
+ )
+)
+(mulh-op mulh   FUNC1_11 rd ra rb)
+
+; Instruction - Compare operation
+(define-pmacro (cmp-op mnemonic tag r1 r2 r3 sem)
  (begin
   (dni mnemonic
    (.str mnemonic " reg/reg/reg")
    ()
    (.str mnemonic " $rd,$ra,$rb")
    (+ OP_7 r1 r2 r3 FUNC2_0 tag)
-   ()
+   (set r1 (sem r2 r3))
    ()
   )
   (dni (.sym mnemonic "i")
@@ -223,20 +278,21 @@
    ()
    (.str mnemonic "i $rd,$ra,$imm12i")
    (+ OP_6 r1 r2 imm12i tag)
-   ()
+   (set r1 (sem r2 imm12i))
    ()
   )
  )
 )
-(cmp-op eq    FUNC1_0  rd ra rb)
-(cmp-op ne    FUNC1_1  rd ra rb)
-(cmp-op lt    FUNC1_2  rd ra rb)
-(cmp-op le    FUNC1_3  rd ra rb)
-(cmp-op ult   FUNC1_4  rd ra rb)
-(cmp-op ule   FUNC1_5  rd ra rb)
-(cmp-op gt    FUNC1_6  rd ra rb)
-(cmp-op ugt   FUNC1_7  rd ra rb)
+(cmp-op eq    FUNC1_0  rd ra rb   eq)
+(cmp-op ne    FUNC1_1  rd ra rb   ne)
+(cmp-op lt    FUNC1_2  rd ra rb   lt)
+(cmp-op le    FUNC1_3  rd ra rb   le)
+(cmp-op ult   FUNC1_4  rd ra rb   ltu)
+(cmp-op ule   FUNC1_5  rd ra rb   leu)
+(cmp-op gt    FUNC1_6  rd ra rb   gt)
+(cmp-op ugt   FUNC1_7  rd ra rb   gtu)
 
+; Instruction - SYSTEM operation
 (define-pmacro (sys-op mnemonic tag)
  (begin
   (dni mnemonic
@@ -244,7 +300,7 @@
    ()
    (.str mnemonic " $imm12i")
    (+ OP_48 RD_0 RA_0 imm12i tag)
-   ()
+   (nop)
    ()
   )
  )
@@ -252,22 +308,40 @@
 (sys-op sysenter  FUNC1_0)
 (sys-op sysexit   FUNC1_1)
 
-(define-pmacro (n-op mnemonic opcode r1 imm com1 com2)
+; Instruction - Load Immediate operation
+(define-pmacro (load-imm-op mnemonic opcode r1 imm com1 com2 sft)
  (begin
   (dni mnemonic
    (.str mnemonic com1)
    ()
    (.str mnemonic com2)
    (+ opcode r1 imm)
-   ()
+   (set r1 (sll imm sft))
    ()
   )
  )
 )
-(n-op li  OP_18 rd imm21n-low   " reg/imm21n-low"  " $rd,$imm21n")
-(n-op lih OP_19 rd imm21n-high  " reg/imm21n-high" " $rd,$imm21n")
-(n-op jl  OP_32 rd imm21n       " reg/imm21n"      " $rd,$imm21n")
+(load-imm-op li  OP_18 rd imm21n-low   " reg/imm21n-low"  " $rd,$imm21n" (const 0))
+(load-imm-op lih OP_19 rd imm21n-high  " reg/imm21n-high" " $rd,$imm21n" (const 11))
 
+; Instruction - Jump (with link) operation
+(define-pmacro (jumplink-op mnemonic opcode r1 imm com1 com2)
+ (begin
+  (dni mnemonic
+   (.str mnemonic com1)
+   ()
+   (.str mnemonic com2)
+   (+ opcode r1 imm)
+   (sequence ()
+      (set r1 (add pc (const 4)))
+      (set pc (add pc (add (const 4) (mul imm (const 4))))))
+   ()
+  )
+ )
+)
+(jumplink-op jl  OP_32 rd imm21n       " reg/imm21n"      " $rd,$imm21n")
+
+; Instruction - Memory Load Store operation
 (define-pmacro (l-op mnemonic opcode r1 r2 imm)
  (begin
   (dni mnemonic
@@ -275,7 +349,7 @@
    ()
    (.str mnemonic " $rd,$imm16l")
    (+ opcode r1 r2 imm)
-   ()
+   (set r1 (mem WI (add USI r2 imm)))
    ()
   )
  )
@@ -289,45 +363,56 @@
    ()
    (.str mnemonic " $rd,$imm16s")
    (+ opcode r2 r3 imm)
-   ()
+   (set (mem WI (add USI r2 imm)) r3)
    ()
   )
  )
 )
 (s-op store OP_25 ra rb imm16s)
 
-(define-pmacro (c-op mnemonic opcode r2 imm)
+; Instruction - Conditional Jump operation
+(define-pmacro (c-jr-op mnemonic opcode r1 r2 imm)
+ (begin
+  (dni mnemonic
+   (.str mnemonic " reg/imm16l")
+   ()
+   (.str mnemonic " $rd,$imm16l")
+   (+ opcode r1 r2 imm)
+   (sequence ()
+      (set r1 (add pc (const 4)))
+      (set pc (add pc (add (const 4) (mul imm (const 4))))))
+   ()
+  )
+ )
+)
+(c-jr-op jr   OP_33 rd ra imm16l)
+(define-pmacro (c-op mnemonic opcode r2 imm cd)
  (begin
   (dni mnemonic
    (.str mnemonic " reg/imm16s")
    ()
    (.str mnemonic " $rd,$imm16s")
    (+ opcode r2 imm)
-   ()
+   (if (cd r2 (const 0))
+      (set USI pc (add USI pc (add USI (const 4) (mul USI imm (const USI 4))))))
    ()
   )
  )
 )
-(c-op jr   OP_33 ra imm21c)
-(c-op jeq  OP_40 ra imm21c)
-(c-op jne  OP_41 ra imm21c)
-(c-op jlt  OP_42 ra imm21c)
-(c-op jle  OP_43 ra imm21c)
-(c-op jgt  OP_44 ra imm21c)
-(c-op jge  OP_45 ra imm21c)
+(c-op jeq  OP_40 ra imm21c  eq)
+(c-op jne  OP_41 ra imm21c  ne)
+(c-op jlt  OP_42 ra imm21c  lt)
+(c-op jle  OP_43 ra imm21c  le)
+(c-op jgt  OP_44 ra imm21c  gt)
+(c-op jge  OP_45 ra imm21c  ge)
 
 ; instruction nop
-(define-pmacro (nop-op mnemonic)
- (begin
-  (dni mnemonic
-   (.str mnemonic)
-   ()
-   (.str mnemonic)
-   (+ OP_0 RD_0 RA_0 RB_0 FUNC2_0 FUNC1_0)
-   ()
-   ()
-  )
- )
+(dni nop
+  "nop"
+  ()
+  "nop"
+  (+ OP_0 RD_0 RA_0 RB_0 FUNC2_0 FUNC1_0)
+  (nop)
+  ()
 )
-(nop-op nop)
 
