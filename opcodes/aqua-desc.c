@@ -480,6 +480,16 @@ static const CGEN_IBASE aqua_cgen_insn_table[MAX_INSNS] =
     AQUA_INSN_STORE, "store", "store", 32,
     { 0, { { { (1<<MACH_BASE), 0 } } } }
   },
+/* lr $ra,$rx */
+  {
+    AQUA_INSN_LR, "lr", "lr", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
+/* sc $ra,$rb,$rx */
+  {
+    AQUA_INSN_SC, "sc", "sc", 32,
+    { 0, { { { (1<<MACH_BASE), 0 } } } }
+  },
 /* jl $rx,$imm21n */
   {
     AQUA_INSN_JL, "jl", "jl", 32,

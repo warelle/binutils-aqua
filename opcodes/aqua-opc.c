@@ -67,6 +67,10 @@ static const CGEN_IFMT ifmt_store ATTRIBUTE_UNUSED = {
   32, 32, 0xfc000000, { { F (F_OPCODE) }, { F (F_RA) }, { F (F_RB) }, { F (F_DISP_S) }, { 0 } }
 };
 
+static const CGEN_IFMT ifmt_lr ATTRIBUTE_UNUSED = {
+  32, 32, 0xfc1fffe0, { { F (F_OPCODE) }, { F (F_RA) }, { F (F_RB) }, { F (F_FUNC) }, { F (F_TAG) }, { F (F_RX) }, { 0 } }
+};
+
 static const CGEN_IFMT ifmt_jr ATTRIBUTE_UNUSED = {
   32, 32, 0xfc1fffe0, { { F (F_OPCODE) }, { F (F_RA) }, { F (F_LIT) }, { F (F_TAG) }, { F (F_RX) }, { 0 } }
 };
@@ -321,6 +325,18 @@ static const CGEN_OPCODE aqua_cgen_insn_opcode_table[MAX_INSNS] =
     { 0, 0, 0, 0 },
     { { MNEM, ' ', OP (RA), ',', OP (RB), ',', OP (IMM16S), 0 } },
     & ifmt_store, { 0x7c000000 }
+  },
+/* lr $ra,$rx */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RA), ',', OP (RX), 0 } },
+    & ifmt_lr, { 0xf8000000 }
+  },
+/* sc $ra,$rb,$rx */
+  {
+    { 0, 0, 0, 0 },
+    { { MNEM, ' ', OP (RA), ',', OP (RB), ',', OP (RX), 0 } },
+    & ifmt_add, { 0xfc000000 }
   },
 /* jl $rx,$imm21n */
   {

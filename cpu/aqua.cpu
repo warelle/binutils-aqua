@@ -263,6 +263,21 @@
 (l-op  load  OP_54 ra rx imm16l)
 (s-op store OP_31 ra rb imm16s)
 
+(define-pmacro (sclr-op mnemonic opcode r1 r2 r3 com1 com2 sem)
+ (begin
+  (dni mnemonic
+   (.str mnemonic com1)
+   ()
+   (.str mnemonic com2)
+   (+ opcode r1 r2 FUNC_0 TAG_0 r3)
+   (sem)
+   ()
+  )
+ )
+)
+(sclr-op lr OP_62 ra RB_0 rx " reg/reg"     " $ra,$rx" nop)
+(sclr-op sc OP_63 ra rb   rx " reg/reg/reg" " $ra,$rb,$rx" nop)
+
 ; Instruction - Jump (with link) operation
 ; Instruction - Jump Register
 (define-pmacro (jumplink-op mnemonic opcode r1 disp)
