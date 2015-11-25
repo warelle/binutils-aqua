@@ -6093,8 +6093,10 @@ assembler and not (currently) written to any object files.  */
   BFD_RELOC_VISIUM_IM16_PCREL,
 
 /* Aqua relocations. */
-  BFD_RELOC_AQUA_HI21,
-  BFD_RELOC_AQUA_LO21,
+  //BFD_RELOC_AQUA_HI21,
+  //BFD_RELOC_AQUA_LO21,
+  BFD_RELOC_AQUA_16,
+  BFD_RELOC_AQUA_21,
 
   BFD_RELOC_UNUSED };
 

@@ -313,32 +313,23 @@ aqua_cgen_print_operand (CGEN_CPU_DESC cd,
 
   switch (opindex)
     {
-    case AQUA_OPERAND_FUNC1 :
-      print_normal (cd, info, fields->f_func1, 0, pc, length);
-      break;
-    case AQUA_OPERAND_FUNC2 :
-      print_normal (cd, info, fields->f_func2, 0, pc, length);
-      break;
-    case AQUA_OPERAND_IMM12I :
-      print_normal (cd, info, fields->f_imm12_i, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
+    case AQUA_OPERAND_FUNC :
+      print_normal (cd, info, fields->f_func, 0, pc, length);
       break;
     case AQUA_OPERAND_IMM16L :
-      print_normal (cd, info, fields->f_imm16_l, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
+      print_normal (cd, info, fields->f_disp_l, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
       break;
     case AQUA_OPERAND_IMM16S :
-      print_normal (cd, info, fields->f_imm16_s, 0|(1<<CGEN_OPERAND_SIGNED)|(1<<CGEN_OPERAND_VIRTUAL), pc, length);
+      print_normal (cd, info, fields->f_disp_s, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
       break;
     case AQUA_OPERAND_IMM21C :
-      print_normal (cd, info, fields->f_imm21_c, 0|(1<<CGEN_OPERAND_SIGNED)|(1<<CGEN_OPERAND_VIRTUAL), pc, length);
+      print_normal (cd, info, fields->f_disp_c, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
       break;
     case AQUA_OPERAND_IMM21N :
-      print_normal (cd, info, fields->f_imm21_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
+      print_normal (cd, info, fields->f_disp_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
       break;
-    case AQUA_OPERAND_IMM21N_HIGH :
-      print_normal (cd, info, fields->f_imm21_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
-      break;
-    case AQUA_OPERAND_IMM21N_LOW :
-      print_normal (cd, info, fields->f_imm21_n, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
+    case AQUA_OPERAND_LIT :
+      print_normal (cd, info, fields->f_lit, 0|(1<<CGEN_OPERAND_SIGNED), pc, length);
       break;
     case AQUA_OPERAND_RA :
       print_keyword (cd, info, & aqua_cgen_opval_h_gr, fields->f_ra, 0);
@@ -346,8 +337,11 @@ aqua_cgen_print_operand (CGEN_CPU_DESC cd,
     case AQUA_OPERAND_RB :
       print_keyword (cd, info, & aqua_cgen_opval_h_gr, fields->f_rb, 0);
       break;
-    case AQUA_OPERAND_RD :
-      print_keyword (cd, info, & aqua_cgen_opval_h_gr, fields->f_rd, 0);
+    case AQUA_OPERAND_RX :
+      print_keyword (cd, info, & aqua_cgen_opval_h_gr, fields->f_rx, 0);
+      break;
+    case AQUA_OPERAND_TAG :
+      print_normal (cd, info, fields->f_tag, 0, pc, length);
       break;
 
     default :

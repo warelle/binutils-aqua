@@ -55,23 +55,8 @@ static reloc_howto_type aqua_elf_howto_table[] =
 	 0xffffffff,		/* dst_mask */
 	 FALSE),		/* pcrel_offset */
 
-  /* 16 bit high absolute relocation. */
-  HOWTO (R_AQUA_16_HIGH,	        /* type */
-	 16,			/* rightshift */
-	 2,			/* size (0 = byte, 1 = short, 2 = long) */
-	 16,			/* bitsize */
-	 FALSE,			/* pc_relative */
-	 0,			/* bitpos */
-	 complain_overflow_bitfield, /* complain_on_overflow */
-	 bfd_elf_generic_reloc,		/* special_function */
-	 "R_AQUA_16_HIGH",		/* name */
-	 FALSE,			/* partial_inplace */
-	 0x00000000,		/* src_mask */
-	 0x0000ffff,		/* dst_mask */
-	 FALSE),		/* pcrel_offset */
-
-  /* 16 bit low absolute relocation. */
-  HOWTO (R_AQUA_16_LOW,	        /* type */
+/* 16 bit absolute relocation. */
+  HOWTO (R_AQUA_16,	        /* type */
 	 0,			/* rightshift */
 	 2,			/* size (0 = byte, 1 = short, 2 = long) */
 	 16,			/* bitsize */
@@ -79,29 +64,14 @@ static reloc_howto_type aqua_elf_howto_table[] =
 	 0,			/* bitpos */
 	 complain_overflow_bitfield, /* complain_on_overflow */
 	 bfd_elf_generic_reloc,		/* special_function */
-	 "R_AQUA_16_LOW",		/* name */
+	 "R_AQUA_16",		/* name */
 	 FALSE,			/* partial_inplace */
 	 0x00000000,		/* src_mask */
 	 0x0000ffff,		/* dst_mask */
 	 FALSE),		/* pcrel_offset */
 
-  /* 21 bit high absolute relocation. */
-  HOWTO (R_AQUA_21_HIGH,	        /* type */
-	 11,			/* rightshift */
-	 2,			/* size (0 = byte, 1 = short, 2 = long) */
-	 21,			/* bitsize */
-	 FALSE,			/* pc_relative */
-	 0,			/* bitpos */
-	 complain_overflow_bitfield, /* complain_on_overflow */
-	 bfd_elf_generic_reloc,		/* special_function */
-	 "R_AQUA_21_HIGH",		/* name */
-	 FALSE,			/* partial_inplace */
-	 0x00000000,		/* src_mask */
-	 0x001fffff,		/* dst_mask */
-	 FALSE),		/* pcrel_offset */
-
-  /* 21 bit low absolute relocation. */
-  HOWTO (R_AQUA_21_LOW,	        /* type */
+/* 21 bit high absolute relocation. */
+  HOWTO (R_AQUA_21,	        /* type */
 	 0,			/* rightshift */
 	 2,			/* size (0 = byte, 1 = short, 2 = long) */
 	 21,			/* bitsize */
@@ -109,11 +79,71 @@ static reloc_howto_type aqua_elf_howto_table[] =
 	 0,			/* bitpos */
 	 complain_overflow_bitfield, /* complain_on_overflow */
 	 bfd_elf_generic_reloc,		/* special_function */
-	 "R_AQUA_21_LOW",		/* name */
+	 "R_AQUA_21",		/* name */
 	 FALSE,			/* partial_inplace */
 	 0x00000000,		/* src_mask */
 	 0x001fffff,		/* dst_mask */
-	 FALSE)		/* pcrel_offset */
+	 FALSE),		/* pcrel_offset */
+
+//  /* 16 bit high absolute relocation. */
+//  HOWTO (R_AQUA_16_HIGH,	        /* type */
+//	 16,			/* rightshift */
+//	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+//	 16,			/* bitsize */
+//	 FALSE,			/* pc_relative */
+//	 0,			/* bitpos */
+//	 complain_overflow_bitfield, /* complain_on_overflow */
+//	 bfd_elf_generic_reloc,		/* special_function */
+//	 "R_AQUA_16_HIGH",		/* name */
+//	 FALSE,			/* partial_inplace */
+//	 0x00000000,		/* src_mask */
+//	 0x0000ffff,		/* dst_mask */
+//	 FALSE),		/* pcrel_offset */
+//
+//  /* 16 bit low absolute relocation. */
+//  HOWTO (R_AQUA_16_LOW,	        /* type */
+//	 0,			/* rightshift */
+//	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+//	 16,			/* bitsize */
+//	 FALSE,			/* pc_relative */
+//	 0,			/* bitpos */
+//	 complain_overflow_bitfield, /* complain_on_overflow */
+//	 bfd_elf_generic_reloc,		/* special_function */
+//	 "R_AQUA_16_LOW",		/* name */
+//	 FALSE,			/* partial_inplace */
+//	 0x00000000,		/* src_mask */
+//	 0x0000ffff,		/* dst_mask */
+//	 FALSE),		/* pcrel_offset */
+
+//  /* 21 bit high absolute relocation. */
+//  HOWTO (R_AQUA_21_HIGH,	        /* type */
+//	 11,			/* rightshift */
+//	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+//	 21,			/* bitsize */
+//	 FALSE,			/* pc_relative */
+//	 0,			/* bitpos */
+//	 complain_overflow_bitfield, /* complain_on_overflow */
+//	 bfd_elf_generic_reloc,		/* special_function */
+//	 "R_AQUA_21_HIGH",		/* name */
+//	 FALSE,			/* partial_inplace */
+//	 0x00000000,		/* src_mask */
+//	 0x001fffff,		/* dst_mask */
+//	 FALSE),		/* pcrel_offset */
+//
+//  /* 21 bit low absolute relocation. */
+//  HOWTO (R_AQUA_21_LOW,	        /* type */
+//	 0,			/* rightshift */
+//	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+//	 21,			/* bitsize */
+//	 FALSE,			/* pc_relative */
+//	 0,			/* bitpos */
+//	 complain_overflow_bitfield, /* complain_on_overflow */
+//	 bfd_elf_generic_reloc,		/* special_function */
+//	 "R_AQUA_21_LOW",		/* name */
+//	 FALSE,			/* partial_inplace */
+//	 0x00000000,		/* src_mask */
+//	 0x001fffff,		/* dst_mask */
+//	 FALSE)		/* pcrel_offset */
 };
 
 /* This structure is used to map BFD reloc codes to aqua elf relocs.  */
@@ -129,11 +159,13 @@ struct elf_reloc_map
 static const struct elf_reloc_map aqua_reloc_map[] =
 {
     { BFD_RELOC_NONE, 		R_AQUA_NONE  },
-    { BFD_RELOC_32, 		R_AQUA_32      },
-    { BFD_RELOC_HI16,   R_AQUA_16_HIGH },
-    { BFD_RELOC_LO16,   R_AQUA_16_LOW  },
-    { BFD_RELOC_AQUA_HI21, R_AQUA_21_HIGH },
-    { BFD_RELOC_AQUA_LO21, R_AQUA_21_LOW  }
+    { BFD_RELOC_32, 		  R_AQUA_32 },
+    { BFD_RELOC_AQUA_16,  R_AQUA_16 },
+    { BFD_RELOC_AQUA_21,  R_AQUA_21 },
+//    { BFD_RELOC_HI16,   R_AQUA_16_HIGH },
+//    { BFD_RELOC_LO16,   R_AQUA_16_LOW  },
+//    { BFD_RELOC_AQUA_HI21, R_AQUA_21_HIGH },
+//    { BFD_RELOC_AQUA_LO21, R_AQUA_21_LOW  }
 };
 
 /* Given a BFD reloc code, return the howto structure for the

@@ -221,10 +221,10 @@ md_cgen_lookup_reloc (const CGEN_INSN *    insn ATTRIBUTE_UNUSED,
 
   switch (operand->type)
   {
-  case AQUA_OPERAND_IMM21N_LOW:
-    return BFD_RELOC_AQUA_LO21;
-  case AQUA_OPERAND_IMM21N_HIGH:
-    return BFD_RELOC_AQUA_HI21;
+  //case AQUA_OPERAND_IMM21N_LOW:
+  //  return BFD_RELOC_AQUA_LO21;
+  //case AQUA_OPERAND_IMM21N_HIGH:
+  //  return BFD_RELOC_AQUA_HI21;
   default:
     break;
   }
